@@ -4,13 +4,17 @@ const faviconUrl = import.meta.env.PUBLIC_FAVICON_URL || "/favicon.svg";
 ---
 
 <html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{title} | MiKS</title>
-		<link rel="icon" type="image/svg+xml" href={faviconUrl} />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
-	</head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title} | MiKS - Record of a moment</title>
+    <meta name="description" content="金沢、ポストカード・ライブラリー、ある瞬間の記録を、手に取れる形へ。" />
+    <meta property="og:title" content={`${title} | MiKS`} />
+    <meta property="og:description" content="Record of a moment. クリエイターの視点を届けるポストカードショップ。" />
+    <meta property="og:image" content="/images/ogp.jpg" /> <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
+</head>
 	<body class="bg-[#fdfdfd] text-[#1a1a1a] font-['Inter'] antialiased">
 		<nav class="fixed top-0 left-0 w-full px-6 py-8 flex justify-between items-center z-50 bg-[#fdfdfd]/40 backdrop-blur-sm transition-all duration-500 hover:bg-[#fdfdfd]/90">
 			<a href="/" class="flex items-center group">

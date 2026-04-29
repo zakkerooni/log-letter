@@ -68,10 +68,10 @@ const products = await stripe.products.list({ active: true, expand: ['data.defau
 						</p>
 					</div>
 					<form action="/api/checkout" method="POST" class="mt-12">
-						<input type="hidden" name="priceId" value={product.default_price?.id} />
-						<button type="submit" class="w-full border border-black py-4 text-[9px] tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all duration-700 ease-in-out">
-							Purchase
-						</button>
+    					<input type="hidden" name="priceId" value={product.default_price?.id} />
+  						<button type="submit" class="w-full border border-black py-4 text-[9px] tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all duration-700 ease-in-out cursor-pointer">
+        				Purchase
+   					 </button>
 					</form>
 				</div>
 			))}
