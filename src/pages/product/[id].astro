@@ -1,0 +1,83 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Stripe from 'stripe';
+
+const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
+const { id } = Astro.params;
+
+const product = await stripe.products.retrieve(id, { expand: ['default_price'] });
+if (!product || !product.active) {
+  return Astro.redirect('/');
+}
+
+const price = product.default_price;
+const amount = price?.unit_amount ?? 0;
+const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST';
+const creator = product.metadata?.creator || 'POST';
+
+// Related products (same creator or random)
+const allProducts = await stripe.products.list({ active: true, expand: ['data.default_price'] });
+const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
+---
+
+<Layout title={product.name}>
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span>/</span>
+    <a href="/#archive">Archive</a>
+    <span>/</span>
+    {product.name}
+  </div>
+
+  <div class="detail-page">
+    <div class="detail-images">
+      <div class="detail-main-img">
+        <img src={image} alt={product.name} />
+      </div>
+      {product.images && product.images.length > 1 && (
+        <div class="detail-thumbs">
+          {product.images.map((img, i) => (
+            <div class={`detail-thumb ${i === 0 ? 'active' : ''}`}>
+              <img src={img} alt="" />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="detail-info">
+      <p class="detail-creator">{creator}</p>
+      <h1 class="detail-name">{product.name}</h1>
+      <p class="detail-price">¥{amount.toLocaleString()} (tax incl.)</p>
+      {product.description && (
+        <p class="detail-desc">{product.description}</p>
+      )}
+      <form action="/api/checkout" method="POST">
+        <input type="hidden" name="priceId" value={price?.id} />
+        <button type="submit" class="detail-buy-btn">
+          Add to Cart
+        </button>
+      </form>
+      <div class="detail-meta">
+        <p>サイズ: 148mm × 100mm</p>
+        <p>印刷: オフセット印刷 / マットコート紙 220g</p>
+        <p>発送: ご注文から3営業日以内</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related -->
+  {related.length > 0 && (
+    <section class="products-section" style="border-top: 1px solid var(--border);">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title" style="margin-bottom: 0;">Related Cards</h2>
+      </div>
+      <div class="product-grid">
+        {related.map((p) => <ProductCard product={p} />)}
+      </div>
+    </section>
+  )}
+</Layout>

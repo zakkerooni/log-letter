@@ -12,7 +12,6 @@ export const POST = async ({ request }) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'payment',
-      // 自動で現在のドメイン（pages.devなど）を取得して戻り先を設定します
       success_url: `${new URL(request.url).origin}/success`,
       cancel_url: `${new URL(request.url).origin}/`,
     });

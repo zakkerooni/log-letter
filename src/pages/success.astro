@@ -3,23 +3,17 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Thank you">
-  <section class="min-h-[70vh] flex items-center justify-center text-center px-8 py-32">
-    <div class="space-y-12 max-w-[640px]">
-      <h1 class="text-[11px] tracking-[0.5em] uppercase text-[#999] font-light">Order Completed</h1>
-      <div class="space-y-6 font-['Noto_Serif_JP'] font-light">
-        <p class="text-[16px] tracking-[0.12em] leading-[2.4] text-[#333]">
-          ご購入ありがとうございました。<br />
-          ポストカードの到着まで、今しばらくお待ちください。
-        </p>
-        <p class="text-[11px] text-[#999] tracking-[0.2em]">
+  <section style="min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 80px 40px;">
+    <div style="max-width: 640px;">
+      <span class="section-title-sm">Order Completed</span>
+      <div class="about-text" style="margin-top: 32px;">
+        <p>ご購入ありがとうございました。<br />ポストカードの到着まで、今しばらくお待ちください。</p>
+        <p style="font-size: 11px; color: var(--muted); letter-spacing: 0.2em; font-family: var(--font-body);">
           ご登録いただいたメールアドレスへ、確認メールをお送りしました。
         </p>
       </div>
-      <div class="pt-8">
-        <a
-          href="/"
-          class="text-[10px] tracking-[0.4em] uppercase border border-[#1c2333] text-[#1c2333] px-14 py-4 hover:bg-[#1c2333] hover:text-white transition-all duration-500"
-        >
+      <div style="margin-top: 48px;">
+        <a href="/" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px;">
           Back to Library
         </a>
       </div>

@@ -8,38 +8,89 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const products = await stripe.products.list({ active: true, expand: ['data.default_price'] });
+
+// Picks: 先頭6件をカルーセルに、全件をアーカイブグリッドに
+const picks = products.data.slice(0, 6);
 ---
 
-<Layout title="Record of a moment">
-  <section class="h-[80vh] w-full relative overflow-hidden bg-[#efefef]">
+<Layout title="Home">
+  <!-- Hero -->
+  <section class="hero">
     <img
-      src="/images/about-hero.jpg"
-      alt="Concept Visual"
-      class="w-full h-full object-cover"
-      onerror="this.src='https://placehold.jp/24/dddddd/888888/1800x1200.png?text=MiKS%20Library'"
+      src="/images/hero.jpg"
+      alt="POST Postcard Library"
+      class="hero-img"
+      onerror="this.style.display='none'"
     />
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none bg-black/10">
-      <h1 class="text-[11px] tracking-[0.8em] uppercase text-white font-light mb-6 drop-shadow-sm">
-        Postcard Library
-      </h1>
-      <div class="w-[1px] h-16 bg-white/50"></div>
+    <div class="hero-overlay">
+      <h1 class="hero-title">Postcard Library</h1>
+      <p class="hero-sub">Kanazawa — Record of a Moment</p>
     </div>
   </section>
 
-  <section class="py-32 px-6 bg-white">
-    <AboutBlock />
+  <!-- Concept -->
+  <AboutBlock />
+
+  <!-- Picks Carousel -->
+  <section style="padding: 0 0 80px;">
+    <div style="text-align: center; padding: 0 40px 48px;">
+      <span class="section-title-sm">Latest</span>
+      <h2 class="section-title" style="margin-bottom: 0;">Picks</h2>
+    </div>
+    <div class="carousel-section">
+      <button class="carousel-nav carousel-prev" aria-label="Previous" data-carousel-prev>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M15 18l-6-6 6-6" /></svg>
+      </button>
+      <div class="carousel-track" data-carousel-track>
+        {picks.map((product) => {
+          const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST';
+          const creator = product.metadata?.creator || 'POST';
+          const price = product.default_price;
+          const amount = price?.unit_amount ?? 0;
+          return (
+            <a href={`/product/${product.id}`} class="carousel-item">
+              <div class="item-img">
+                <img src={image} alt={product.name} loading="lazy" />
+              </div>
+              <p class="item-creator">{creator}</p>
+              <p class="item-name">{product.name}</p>
+              <p class="item-price">¥{amount.toLocaleString()}</p>
+            </a>
+          );
+        })}
+      </div>
+      <button class="carousel-nav carousel-next" aria-label="Next" data-carousel-next>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 18l6-6-6-6" /></svg>
+      </button>
+    </div>
   </section>
 
-  <section id="archive" class="max-w-[1400px] mx-auto px-8 py-24 border-t border-[#ececec]">
-    <div class="mb-16 flex items-end justify-between">
-      <h2 class="text-[11px] tracking-[0.5em] uppercase text-[#555] font-light">Library Archive</h2>
-      <span class="text-[9px] text-[#aaa] tracking-[0.3em] font-light">
-        {products.data.length} Records
-      </span>
+  <!-- Archive Grid -->
+  <section id="archive" class="products-section" style="border-top: 1px solid var(--border);">
+    <div style="text-align: center; margin-bottom: 56px;">
+      <span class="section-title-sm">{products.data.length} Records</span>
+      <h2 class="section-title" style="margin-bottom: 0;">Library Archive</h2>
     </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20">
+    <div class="product-grid">
       {products.data.map((product) => <ProductCard product={product} />)}
     </div>
   </section>
+
+  <div class="back-top" data-back-top>↑ Back to Top</div>
 </Layout>
+
+<script>
+  // Carousel navigation
+  const track = document.querySelector('[data-carousel-track]');
+  document.querySelector('[data-carousel-prev]')?.addEventListener('click', () => {
+    track?.scrollBy({ left: -260, behavior: 'smooth' });
+  });
+  document.querySelector('[data-carousel-next]')?.addEventListener('click', () => {
+    track?.scrollBy({ left: 260, behavior: 'smooth' });
+  });
+
+  // Back to top
+  document.querySelector('[data-back-top]')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>

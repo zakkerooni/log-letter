@@ -2,22 +2,13 @@
 const { compact = false } = Astro.props;
 ---
 
-<div class={`max-w-[720px] mx-auto space-y-12 ${compact ? '' : 'py-32'}`}>
-  <h3 class="text-[10px] tracking-[0.6em] uppercase text-[#aaa] font-light text-center">
-    The Record of a Moment
-  </h3>
-  <div class="font-['Noto_Serif_JP'] text-[14px] tracking-[0.12em] font-light leading-[2.6] text-[#333] text-center">
-    <p class="mb-8">
-      ポストカードは、ある瞬間の「記録」である。<br />
-      私たちはそう考えます。
-    </p>
-    <p class="mb-8">
-      金沢の静かな空気感や、クリエイターの視点が切り取った断片を、<br />
-      手に取れる形、届ける形へと。
-    </p>
-    <p>
-      MiKSは、クリエイターの創作活動を支援し、<br />
-      売上の一部は、次なる作品を生むための糧として作家へ還元されます。
-    </p>
+<div class={`about-section ${compact ? 'compact' : ''}`}>
+  <div style="margin-bottom: 32px;">
+    <span class="section-title-sm">Concept</span>
+    <h2 class="section-title" style="margin-bottom: 0;">The Record of a Moment</h2>
+  </div>
+  <div class="about-text">
+    <p>ポストカードは、ある瞬間の「記録」である。私たちはそう考えます。</p>
+    <p>金沢の静かな空気感や、クリエイターの視点が切り取った断片を、手に取れる形、届ける形へと。</p>
   </div>
 </div>
