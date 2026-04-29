@@ -3,23 +3,26 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Thank you">
-	<main class="min-h-[60vh] flex items-center justify-center text-center px-6">
-		<div class="space-y-12">
-			<h1 class="text-[11px] tracking-[0.5em] uppercase text-gray-400 font-light">Order Completed</h1>
-			<div class="space-y-6">
-				<p class="text-xl font-light tracking-[0.15em] leading-loose">
-					ご購入ありがとうございました。<br>
-					ポストカードの到着まで、今しばらくお待ちください。
-				</p>
-				<p class="text-[11px] text-gray-400 tracking-widest font-light">
-					ご登録いただいたメールアドレスへ、確認メールをお送りしました。
-				</p>
-			</div>
-			<div class="pt-12">
-				<a href="/" class="text-[10px] tracking-[0.3em] uppercase border-b border-black pb-2 hover:text-gray-400 transition-all">
-					Back to Library
-				</a>
-			</div>
-		</div>
-	</main>
+  <section class="min-h-[70vh] flex items-center justify-center text-center px-8 py-32">
+    <div class="space-y-12 max-w-[640px]">
+      <h1 class="text-[11px] tracking-[0.5em] uppercase text-[#999] font-light">Order Completed</h1>
+      <div class="space-y-6 font-['Noto_Serif_JP'] font-light">
+        <p class="text-[16px] tracking-[0.12em] leading-[2.4] text-[#333]">
+          ご購入ありがとうございました。<br />
+          ポストカードの到着まで、今しばらくお待ちください。
+        </p>
+        <p class="text-[11px] text-[#999] tracking-[0.2em]">
+          ご登録いただいたメールアドレスへ、確認メールをお送りしました。
+        </p>
+      </div>
+      <div class="pt-8">
+        <a
+          href="/"
+          class="text-[10px] tracking-[0.4em] uppercase border border-[#1c2333] text-[#1c2333] px-14 py-4 hover:bg-[#1c2333] hover:text-white transition-all duration-500"
+        >
+          Back to Library
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>

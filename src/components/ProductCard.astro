@@ -1,0 +1,35 @@
+---
+const { product } = Astro.props;
+const price = product.default_price;
+const amount = price?.unit_amount ?? 0;
+const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=MiKS';
+const creator = product.metadata?.creator || 'MiKS Collective';
+---
+
+<article class="flex flex-col group">
+  <div class="overflow-hidden bg-[#f4f4f4] aspect-square mb-6">
+    <img
+      src={image}
+      alt={product.name}
+      loading="lazy"
+      class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[1500ms] ease-out"
+    />
+  </div>
+  <div class="flex-grow space-y-3">
+    <p class="text-[9px] text-[#999] uppercase tracking-[0.4em] font-light">{creator}</p>
+    <h3 class="text-[13px] tracking-[0.08em] font-normal text-[#1a1a1a]">{product.name}</h3>
+    <p class="text-[11px] text-[#666] font-light">¥{amount.toLocaleString()}</p>
+    {product.description && (
+      <p class="text-[10px] text-[#999] font-light leading-relaxed pt-1">{product.description}</p>
+    )}
+  </div>
+  <form action="/api/checkout" method="POST" class="mt-6">
+    <input type="hidden" name="priceId" value={price?.id} />
+    <button
+      type="submit"
+      class="w-full border border-[#1c2333] py-3 text-[10px] tracking-[0.4em] uppercase text-[#1c2333] hover:bg-[#1c2333] hover:text-white transition-all duration-500 cursor-pointer"
+    >
+      Purchase
+    </button>
+  </form>
+</article>

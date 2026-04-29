@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.2.2",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.1.10",
     "stripe": "^22.1.0",

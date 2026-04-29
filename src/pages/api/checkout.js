@@ -1,4 +1,7 @@
 import Stripe from 'stripe';
+
+export const prerender = false;
+
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
 export const POST = async ({ request }) => {

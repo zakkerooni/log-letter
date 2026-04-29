@@ -1,23 +1,78 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+const { title } = Astro.props;
+const faviconUrl = import.meta.env.PUBLIC_FAVICON_URL || '/favicon.svg';
+const logoUrl = import.meta.env.PUBLIC_LOGO_URL || '/images/logo.png';
+const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || '#';
+const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'info@miks-inc.com';
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title} | MiKS — Record of a moment</title>
+    <meta name="description" content="金沢、ポストカード・ライブラリー。ある瞬間の記録を、手に取れる形へ。" />
+    <meta property="og:title" content={`${title} | MiKS`} />
+    <meta property="og:description" content="Record of a moment. クリエイターの視点を届けるポストカードショップ。" />
+    <meta property="og:image" content="/images/ogp.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Serif+JP:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-white text-[#1a1a1a] font-['Inter'] antialiased">
+    <header class="fixed top-0 left-0 w-full bg-white border-b border-[#ececec] z-50">
+      <div class="max-w-[1400px] mx-auto px-8 py-5 flex justify-between items-center">
+        <a href="/" class="flex items-center group">
+          <img
+            src={logoUrl}
+            alt="MiKS"
+            class="h-4 w-auto object-contain"
+            onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+          />
+          <span class="text-base tracking-[0.35em] font-light hidden">MiKS</span>
+        </a>
+        <nav class="flex gap-10 text-[10px] tracking-[0.4em] uppercase text-[#555] font-light">
+          <a href="/#archive" class="hover:text-black transition-colors">Archive</a>
+          <a href="/about" class="hover:text-black transition-colors">About</a>
+          <a href={`mailto:${contactEmail}`} class="hover:text-black transition-colors">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="pt-[64px]">
+      <slot />
+    </main>
+
+    <footer class="mt-32 border-t border-[#ececec] bg-[#f5f5f5]">
+      <div class="max-w-[1400px] mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-3 gap-12 text-[10px] tracking-[0.3em] uppercase font-light text-[#777]">
+        <div class="space-y-3">
+          <p class="text-black tracking-[0.4em] font-normal">MiKS inc.</p>
+          <p>Kanazawa, Japan</p>
+          <p class="text-[#aaa]">© 2026 Record of a moment</p>
+        </div>
+        <div class="space-y-3">
+          <p class="text-black tracking-[0.4em] font-normal">Menu</p>
+          <ul class="space-y-2 normal-case tracking-[0.3em]">
+            <li><a href="/#archive" class="hover:text-black transition-colors">Archive</a></li>
+            <li><a href="/about" class="hover:text-black transition-colors">About</a></li>
+          </ul>
+        </div>
+        <div class="space-y-3">
+          <p class="text-black tracking-[0.4em] font-normal">Connect</p>
+          <ul class="space-y-2">
+            <li><a href={instagramUrl} target="_blank" rel="noopener" class="hover:text-black transition-colors">Instagram</a></li>
+            <li><a href={`mailto:${contactEmail}`} class="hover:text-black transition-colors">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
