@@ -1,44 +1,45 @@
-# MiKS Postcard Shop
+# POST Shop
 
-金沢発のポストカード・ライブラリー。Astro + Tailwind CSS v4 + Stripe + Cloudflare Pages（SSR）で構築。デザインは [lost-found-store.jp](https://lost-found-store.jp) の世界観を踏襲。
+金沢のポストカード・ライブラリー。Astro + Stripe + Cloudflare Pages。
 
-## コマンド
+## 🚀 セットアップ
 
-| Command           | 説明                                    |
-| ----------------- | --------------------------------------- |
-| `npm install`     | 依存関係のインストール                  |
-| `npm run dev`     | ローカル開発サーバー（localhost:4321）  |
-| `npm run build`   | 本番ビルド（`./dist/` に出力）          |
-| `npm run preview` | ビルド成果物のプレビュー                |
-
-## ローカル開発
-
-`.env` を作成し、Stripe テストキーを設定。
-
-```env
-STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxx
+```bash
+npm install
+npm run dev
 ```
 
-`npm install && npm run dev` で起動。テストカード `4242 4242 4242 4242` で購入フローを確認できます。
+## 📦 環境変数
 
-## Cloudflare Pages デプロイ
+`.env.example` を `.env` にコピーして値を設定：
 
-- **Build command**: `npm run build`
-- **Build output directory**: `dist`
-- **Compatibility flags**: `nodejs_compat`
+```env
+STRIPE_SECRET_KEY=sk_live_xxxxx
+PUBLIC_BANNER_TEXT=お知らせバナーのテキスト
+PUBLIC_INSTAGRAM_URL=https://instagram.com/yourname
+PUBLIC_CONTACT_EMAIL=info@example.com
+PUBLIC_GA_ID=G-XXXXXXXXXX
+```
 
-### 環境変数 (Environment Variables)
-Cloudflare Pages のダッシュボードで設定すると、コードを触らずにサイトを更新できます。
+## ☁️ Cloudflare Pages デプロイ
 
-- `STRIPE_SECRET_KEY`: Stripe の秘密鍵（※リポジトリには絶対にコミットしない）
-- `PUBLIC_LOGO_URL`: ロゴ画像の URL（未設定なら `/images/logo.png` → テキスト「MiKS」にフォールバック）
-- `PUBLIC_FAVICON_URL`: タブのアイコン URL
-- `PUBLIC_INSTAGRAM_URL`: Instagram のリンク
-- `PUBLIC_CONTACT_EMAIL`: 問い合わせ先メール
+1. GitHubリポジトリと連携
+2. **Build command** を以下に設定：
+   ```
+   npm install && npm run build
+   ```
+3. **Build output directory**: `dist`
+4. 環境変数を設定（上記の値）
+5. デプロイ
 
-## Stripe 商品メタデータ
-Stripe ダッシュボード > 商品編集 > メタデータで設定。
+> ⚠️ `package-lock.json` は含めていません。Cloudflareの `npm install` で自動生成されます。
 
-- `creator`: 作家名（カードに表示されます）
+## 📖 編集ガイド
 
-商品画像・商品名・説明・価格は Stripe 側のフィールドをそのまま使用します。
+詳細は [`GUIDE.md`](./GUIDE.md) を参照。
+
+- バナー・SNSリンク・メールの変更
+- 画像の差し替え（`public/images/`）
+- 文章・色・フォントの変更
+- 商品管理（Stripe）
+- 法的ページの記入
