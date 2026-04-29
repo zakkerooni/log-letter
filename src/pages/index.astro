@@ -1,88 +1,44 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import Stripe from 'stripe';
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
-
-const products = await stripe.products.list({
-  active: true,
-  expand: ['data.default_price'],
-});
+const products = await stripe.products.list({ active: true, expand: ['data.default_price'] });
 ---
 
-<html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>MiKS | Postcard Library</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
-	</head>
-	<body class="bg-[#fdfdfd] text-[#1a1a1a] font-['Inter',_sans-serif] antialiased">
-		
-		<nav class="border-b border-[#e5e5e5] px-6 py-4 flex justify-between items-center sticky top-0 bg-[#fdfdfd]/80 backdrop-blur-md z-50">
-			<div class="text-xl tracking-[0.2em] font-light">MiKS</div>
-			<div class="hidden md:flex space-x-8 text-[10px] tracking-widest uppercase text-gray-500">
-				<a href="#" class="hover:text-black">All Items</a>
-				<a href="#" class="hover:text-black">Creators</a>
-				<a href="#" class="hover:text-black">About</a>
-			</div>
-		</nav>
+<Layout title="Postcard Library">
+	<main class="max-w-[1400px] mx-auto px-6 py-20">
+		<header class="mb-16">
+			<h2 class="text-[11px] tracking-[0.4em] uppercase text-gray-400 mb-3 font-light">New Arrivals</h2>
+			<div class="w-12 h-[1px] bg-black"></div>
+		</header>
 
-		<main class="max-w-[1400px] mx-auto px-6 py-16">
-			<header class="mb-16">
-				<h2 class="text-[11px] tracking-[0.3em] uppercase text-gray-400 mb-2">New Arrivals</h2>
-				<div class="w-10 h-[1px] bg-black"></div>
-			</header>
-
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
-				{products.data.map((product) => (
-					<div class="group cursor-pointer">
-						<div class="overflow-hidden bg-[#f5f5f5] aspect-[3/4] mb-6">
-							<img 
-								src={product.images[0]} 
-								alt={product.name}
-								class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-							/>
-						</div>
-						
-						<div class="space-y-2">
-							<div class="flex justify-between items-baseline">
-								<h3 class="text-[13px] tracking-wider font-normal">{product.name}</h3>
-								<span class="text-[12px] font-light">¥{product.default_price.unit_amount.toLocaleString()}</span>
-							</div>
-							<p class="text-[11px] text-gray-400 font-light leading-relaxed">
-								{product.description}
-							</p>
-						</div>
-
-						<form action="/api/checkout" method="POST" class="mt-6">
-							<input type="hidden" name="priceId" value={product.default_price.id} />
-							<button type="submit" class="w-full border border-black py-3 text-[10px] tracking-[0.2em] uppercase hover:bg-black hover:text-white transition-colors duration-300">
-								Add to Cart
-							</button>
-						</form>
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+			{products.data.map((product) => (
+				<div class="flex flex-col h-full">
+					<div class="overflow-hidden bg-[#f2f2f2] aspect-[3/4] mb-8 group">
+						<img src={product.images[0]} alt={product.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" />
 					</div>
-				))}
-			</div>
-		</main>
-
-		<footer class="mt-32 border-t border-[#e5e5e5] px-6 py-20 bg-[#f9f9f9]">
-			<div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-[11px] tracking-widest text-gray-500 uppercase">
-				<div>
-					<p class="text-black mb-4 font-normal">MiKS inc.</p>
-					<p>Kanazawa / Ishikawa</p>
+					<div class="flex-grow space-y-3">
+						<div class="flex justify-between items-start gap-4">
+							<div class="min-h-[64px]">
+								<p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-2 font-light">
+									{product.metadata.creator || 'MiKS Collective'}
+								</p>
+								<h3 class="text-[13px] tracking-[0.1em] font-normal leading-relaxed">{product.name}</h3>
+							</div>
+							<span class="text-[12px] font-light pt-1">
+								¥{product.default_price ? product.default_price.unit_amount.toLocaleString() : '---'}
+							</span>
+						</div>
+					</div>
+					<form action="/api/checkout" method="POST" class="mt-8">
+						<input type="hidden" name="priceId" value={product.default_price?.id} />
+						<button type="submit" class="w-full border border-black py-4 text-[10px] tracking-[0.3em] uppercase hover:bg-black hover:text-white transition-all duration-500">
+							Add to Cart
+						</button>
+					</form>
 				</div>
-				<div>
-					<p class="text-black mb-4 font-normal">Social</p>
-					<a href="#" class="block hover:text-black">Instagram</a>
-				</div>
-				<div>
-					<p class="text-black mb-4 font-normal">Help</p>
-					<a href="#" class="block hover:text-black">Shipping</a>
-					<a href="#" class="block hover:text-black">Contact</a>
-				</div>
-			</div>
-		</footer>
-
-	</body>
-</html>
+			))}
+		</div>
+	</main>
+</Layout>

@@ -1,28 +1,25 @@
 ---
-import Layout from '../layouts/Layout.astro'; // もしLayoutファイルがあれば
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<title>Thank you | MiKS</title>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
-	</head>
-	<body class="bg-[#fdfdfd] text-[#1a1a1a] font-['Inter'] antialiased flex items-center justify-center min-h-screen">
-		<div class="text-center space-y-8 animate-fade-in">
-			<h1 class="text-[11px] tracking-[0.4em] uppercase text-gray-400">Order Completed</h1>
-			<div class="space-y-4">
-				<p class="text-xl font-light tracking-widest">ご購入ありがとうございました。</p>
-				<p class="text-[12px] text-gray-500 leading-relaxed font-light">
-					ポストカードは1週間以内に発送いたします。<br>
-					手元に届くまでの時間も、どうぞお楽しみください。
+<Layout title="Thank you">
+	<main class="min-h-[60vh] flex items-center justify-center text-center px-6">
+		<div class="space-y-12">
+			<h1 class="text-[11px] tracking-[0.5em] uppercase text-gray-400 font-light">Order Completed</h1>
+			<div class="space-y-6">
+				<p class="text-xl font-light tracking-[0.15em] leading-loose">
+					ご購入ありがとうございました。<br>
+					ポストカードの到着まで、今しばらくお待ちください。
+				</p>
+				<p class="text-[11px] text-gray-400 tracking-widest font-light">
+					ご登録いただいたメールアドレスへ、確認メールをお送りしました。
 				</p>
 			</div>
-			<div class="pt-8">
-				<a href="/" class="text-[10px] tracking-[0.2em] uppercase border-b border-black pb-1 hover:text-gray-400 hover:border-gray-400 transition-all">
+			<div class="pt-12">
+				<a href="/" class="text-[10px] tracking-[0.3em] uppercase border-b border-black pb-2 hover:text-gray-400 transition-all">
 					Back to Library
 				</a>
 			</div>
 		</div>
-	</body>
-</html>
+	</main>
+</Layout>
