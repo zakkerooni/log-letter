@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Cart">
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span>/</span>
+    Cart
+  </div>
+
+  <section style="max-width: 800px; margin: 0 auto; padding: 40px 40px 100px;">
+    <h1 class="section-title" style="margin-bottom: 48px;">Cart</h1>
+
+    <div id="cart-empty" style="display: none; text-align: center; padding: 60px 0;">
+      <p style="font-family: var(--font-jp); color: var(--muted); font-size: 14px;">カートは空です</p>
+      <a href="/#archive" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px; margin-top: 32px;">
+        Back to Archive
+      </a>
+    </div>
+
+    <div id="cart-items"></div>
+
+    <div id="cart-footer" style="display: none; border-top: 1px solid var(--border); padding-top: 32px; margin-top: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <span style="font-family: var(--font-body); font-size: 14px; letter-spacing: 1px;">合計</span>
+        <span id="cart-total" style="font-family: var(--font-display); font-size: 24px; letter-spacing: 1px;"></span>
+      </div>
+      <form action="/api/checkout" method="POST">
+        <input type="hidden" name="cartData" id="cart-data-input" />
+        <button type="submit" class="detail-buy-btn" style="width: 100%;">
+          Checkout
+        </button>
+      </form>
+      <a href="/#archive" style="display: block; text-align: center; margin-top: 16px; font-size: 11px; letter-spacing: 1px; color: var(--muted); font-family: var(--font-body); transition: color 0.3s;">
+        買い物を続ける
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto auto;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-body);
+  }
+  .cart-item-img {
+    width: 80px; height: 80px;
+    background: var(--card-bg); overflow: hidden;
+  }
+  .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+  .cart-item-name { font-size: 14px; letter-spacing: 1px; }
+  .cart-item-creator { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+  .cart-item-price { font-size: 14px; letter-spacing: 1px; white-space: nowrap; }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cart-item-qty button {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border); background: none;
+    font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .cart-item-qty button:hover { background: var(--fg); color: #fff; border-color: var(--fg); }
+  .cart-item-qty span { font-size: 14px; min-width: 20px; text-align: center; }
+  .cart-remove {
+    font-size: 11px; color: var(--muted); letter-spacing: 1px;
+    cursor: pointer; border: none; background: none;
+    font-family: var(--font-body); transition: color 0.3s;
+  }
+  .cart-remove:hover { color: var(--fg); }
+
+  @media (max-width: 768px) {
+    .cart-item { grid-template-columns: 60px 1fr; gap: 12px; }
+    .cart-item-qty { grid-column: 1 / -1; justify-content: space-between; }
+  }
+</style>
+
+<script>
+  const MAX_QTY = 10;
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('post-cart') || '[]'); }
+    catch { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem('post-cart', JSON.stringify(cart));
+    // Update badge in layout
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.querySelectorAll('[data-cart-count]').forEach(el => {
+      el.textContent = count > 0 ? count.toString() : '';
+      el.classList.toggle('show', count > 0);
+    });
+  }
+
+  function renderCart() {
+    const cart = getCart();
+    const itemsEl = document.getElementById('cart-items');
+    const emptyEl = document.getElementById('cart-empty');
+    const footerEl = document.getElementById('cart-footer');
+    const totalEl = document.getElementById('cart-total');
+    const dataInput = document.getElementById('cart-data-input');
+
+    if (!itemsEl || !emptyEl || !footerEl) return;
+
+    if (cart.length === 0) {
+      emptyEl.style.display = 'block';
+      footerEl.style.display = 'none';
+      itemsEl.innerHTML = '';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+    footerEl.style.display = 'block';
+
+    let total = 0;
+    itemsEl.innerHTML = cart.map((item, i) => {
+      total += item.price * item.qty;
+      return `
+        <div class="cart-item">
+          <div class="cart-item-img">
+            <img src="${item.image}" alt="${item.name}" />
+          </div>
+          <div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-creator">${item.creator}</div>
+          </div>
+          <div class="cart-item-qty">
+            <button data-qty-minus="${i}">−</button>
+            <span>${item.qty}</span>
+            <button data-qty-plus="${i}">+</button>
+          </div>
+          <div style="text-align: right;">
+            <div class="cart-item-price">¥${(item.price * item.qty).toLocaleString()}</div>
+            <button class="cart-remove" data-remove="${i}">削除</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    totalEl.textContent = `¥${total.toLocaleString()}`;
+    dataInput.value = JSON.stringify(cart.map(item => ({ priceId: item.priceId, qty: item.qty })));
+
+    // Bind events
+    itemsEl.querySelectorAll('[data-qty-minus]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const c = getCart();
+        const idx = parseInt(btn.dataset.qtyMinus);
+        c[idx].qty = Math.max(1, c[idx].qty - 1);
+        saveCart(c); renderCart();
+      });
+    });
+    itemsEl.querySelectorAll('[data-qty-plus]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const c = getCart();
+        const idx = parseInt(btn.dataset.qtyPlus);
+        if (c[idx].qty >= MAX_QTY) return;
+        c[idx].qty += 1;
+        saveCart(c); renderCart();
+      });
+    });
+    itemsEl.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const c = getCart();
+        c.splice(parseInt(btn.dataset.remove), 1);
+        saveCart(c); renderCart();
+      });
+    });
+  }
+
+  renderCart();
+</script>

@@ -5,13 +5,14 @@ const { title } = Astro.props;
 const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://instagram.com';
 const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'info@miks-inc.com';
 const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送について — 4/29〜5/6は発送をお休みいたします';
+const gaId = import.meta.env.PUBLIC_GA_ID || '';
 ---
 
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | POST — Postcard Library</title>
     <meta name="description" content="金沢、ポストカード・ライブラリー。ある瞬間の記録を、手に取れる形へ。" />
     <meta property="og:title" content={`${title} | POST`} />
@@ -21,12 +22,23 @@ const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送�
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet" />
+    {gaId && (
+      <Fragment>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </Fragment>
+    )}
   </head>
   <body>
+    <!-- Page loader -->
+    <div class="page-loader" id="page-loader"></div>
+
     <!-- Announcement Bar -->
     {bannerText && (
       <div class="announce-bar">{bannerText}</div>
@@ -35,6 +47,9 @@ const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送�
     <!-- Header -->
     <header class="site-header">
       <div class="header-inner">
+        <button class="mobile-menu-btn" aria-label="Menu" data-mobile-menu-open>
+          <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+        </button>
         <nav class="header-left">
           <a href="/#archive">Archive (Online Shop)</a>
           <a href="/about">About</a>
@@ -46,23 +61,73 @@ const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送�
         </div>
         <div class="header-right">
           <div class="header-icons">
-            <button aria-label="Search">
+            <button aria-label="Search" data-search-open>
               <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg>
             </button>
             <a href={instagramUrl} target="_blank" rel="noopener" aria-label="Instagram">
               <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="5"></circle><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"></circle></svg>
             </a>
-            <a href="/cart" aria-label="Cart">
+            <button aria-label="Cart" data-mini-cart-open style="position:relative;">
               <svg viewBox="0 0 24 24" class="cart-icon"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 01-8 0"></path></svg>
-            </a>
+              <span class="cart-badge" data-cart-count></span>
+            </button>
           </div>
         </div>
       </div>
     </header>
 
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobile-nav">
+      <button class="mobile-nav-close" data-mobile-menu-close>✕</button>
+      <a href="/">Home</a>
+      <a href="/#archive">Archive (Online Shop)</a>
+      <a href="/about">About</a>
+      <a href="/cart">Cart</a>
+      <a href={`mailto:${contactEmail}`}>Contact</a>
+      <a href="/legal/tokushoho">特定商取引法に基づく表記</a>
+      <a href="/legal/privacy">プライバシーポリシー</a>
+    </div>
+
+    <!-- Search overlay -->
+    <div class="search-overlay" id="search-overlay">
+      <button class="search-close" data-search-close>✕</button>
+      <input type="text" class="search-input" placeholder="Search..." id="search-input" autocomplete="off" />
+      <div class="search-results" id="search-results"></div>
+    </div>
+
+    <!-- Mini cart drawer -->
+    <div class="mini-cart-overlay" id="mini-cart-overlay" data-mini-cart-close></div>
+    <div class="mini-cart" id="mini-cart">
+      <div class="mini-cart-header">
+        <span>Cart</span>
+        <button class="mini-cart-close" data-mini-cart-close>✕</button>
+      </div>
+      <div class="mini-cart-items" id="mini-cart-items"></div>
+      <div class="mini-cart-footer" id="mini-cart-footer" style="display:none;">
+        <div class="mini-cart-total">
+          <span>合計</span>
+          <span id="mini-cart-total"></span>
+        </div>
+        <form action="/api/checkout" method="POST">
+          <input type="hidden" name="cartData" id="mini-cart-data" />
+          <button type="submit" class="mini-cart-checkout">Checkout</button>
+        </form>
+        <a href="/#archive" class="mini-cart-continue" data-mini-cart-close>買い物を続ける</a>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <span id="toast-msg"></span>
+      <span class="toast-action" data-mini-cart-open>カートを見る</span>
+    </div>
+
     <main>
       <slot />
     </main>
+
+    <!-- Back to top -->
+    <button class="back-top" id="back-top" aria-label="Back to top">↑</button>
 
     <!-- Footer -->
     <footer>
@@ -84,8 +149,201 @@ const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送�
             <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
           </div>
         </div>
-        <div class="footer-bottom">© 2026 POST — Record of a moment. All rights reserved.</div>
+        <div class="footer-grid" style="margin-top: 32px;">
+          <div class="footer-col">
+            <a href="/legal/tokushoho">特定商取引法に基づく表記</a>
+            <a href="/legal/privacy">プライバシーポリシー</a>
+            <a href="/legal/shipping">配送・返品ポリシー</a>
+          </div>
+        </div>
+        <div class="footer-bottom">© <span id="footer-year"></span> POST — Record of a moment. All rights reserved.</div>
       </div>
     </footer>
+
+    <!-- Global JS -->
+    <script>
+      // ===== Dynamic year =====
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      // ===== Cart helpers =====
+      const MAX_QTY = 10;
+      function getCart() {
+        try { return JSON.parse(localStorage.getItem('post-cart') || '[]'); }
+        catch { return []; }
+      }
+      function saveCart(cart) {
+        localStorage.setItem('post-cart', JSON.stringify(cart));
+        updateCartBadge();
+      }
+      function addToCart(item) {
+        const cart = getCart();
+        const existing = cart.find(c => c.productId === item.productId);
+        if (existing) {
+          if (existing.qty >= MAX_QTY) {
+            showToast(`最大${MAX_QTY}個までです`);
+            return;
+          }
+          existing.qty += 1;
+        } else {
+          cart.push({ ...item, qty: 1 });
+        }
+        saveCart(cart);
+        showToast(`${item.name} をカートに追加しました`);
+        renderMiniCart();
+      }
+      function updateCartBadge() {
+        const cart = getCart();
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.querySelectorAll('[data-cart-count]').forEach(el => {
+          el.textContent = count > 0 ? count.toString() : '';
+          el.classList.toggle('show', count > 0);
+          el.classList.add('pulse');
+          setTimeout(() => el.classList.remove('pulse'), 300);
+        });
+      }
+
+      // ===== Toast =====
+      let toastTimer;
+      function showToast(msg) {
+        const toast = document.getElementById('toast');
+        const tmsg = document.getElementById('toast-msg');
+        if (!toast || !tmsg) return;
+        tmsg.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+
+      // ===== Mini cart =====
+      function openMiniCart() {
+        document.getElementById('mini-cart')?.classList.add('open');
+        document.getElementById('mini-cart-overlay')?.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderMiniCart();
+      }
+      function closeMiniCart() {
+        document.getElementById('mini-cart')?.classList.remove('open');
+        document.getElementById('mini-cart-overlay')?.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      function renderMiniCart() {
+        const cart = getCart();
+        const itemsEl = document.getElementById('mini-cart-items');
+        const footerEl = document.getElementById('mini-cart-footer');
+        const totalEl = document.getElementById('mini-cart-total');
+        const dataInput = document.getElementById('mini-cart-data');
+        if (!itemsEl) return;
+
+        if (cart.length === 0) {
+          itemsEl.innerHTML = '<div class="mini-cart-empty">カートは空です</div>';
+          if (footerEl) footerEl.style.display = 'none';
+          return;
+        }
+        if (footerEl) footerEl.style.display = 'block';
+
+        let total = 0;
+        itemsEl.innerHTML = cart.map((item, i) => {
+          total += item.price * item.qty;
+          return `<div class="mini-cart-item">
+            <div class="mini-cart-item-img"><img src="${item.image}" alt="" /></div>
+            <div>
+              <div class="mini-cart-item-name">${item.name}</div>
+              <div class="mini-cart-item-detail">${item.creator} × ${item.qty}</div>
+            </div>
+            <div class="mini-cart-item-price">¥${(item.price * item.qty).toLocaleString()}</div>
+          </div>`;
+        }).join('');
+
+        if (totalEl) totalEl.textContent = `¥${total.toLocaleString()}`;
+        if (dataInput) dataInput.value = JSON.stringify(cart.map(item => ({ priceId: item.priceId, qty: item.qty })));
+      }
+
+      // ===== Bind cart buttons =====
+      document.querySelectorAll('[data-add-cart]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          addToCart({
+            productId: btn.dataset.productId,
+            priceId: btn.dataset.priceId,
+            name: btn.dataset.name,
+            creator: btn.dataset.creator,
+            image: btn.dataset.image,
+            price: parseInt(btn.dataset.price),
+          });
+          btn.textContent = 'Added ✓';
+          btn.classList.add('added');
+          setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1500);
+        });
+      });
+
+      document.querySelectorAll('[data-mini-cart-open]').forEach(el =>
+        el.addEventListener('click', (e) => { e.preventDefault(); openMiniCart(); })
+      );
+      document.querySelectorAll('[data-mini-cart-close]').forEach(el =>
+        el.addEventListener('click', closeMiniCart)
+      );
+
+      // ===== Mobile menu =====
+      document.querySelectorAll('[data-mobile-menu-open]').forEach(el =>
+        el.addEventListener('click', () => document.getElementById('mobile-nav')?.classList.add('open'))
+      );
+      document.querySelectorAll('[data-mobile-menu-close]').forEach(el =>
+        el.addEventListener('click', () => document.getElementById('mobile-nav')?.classList.remove('open'))
+      );
+
+      // ===== Search =====
+      document.querySelectorAll('[data-search-open]').forEach(el =>
+        el.addEventListener('click', () => {
+          document.getElementById('search-overlay')?.classList.add('open');
+          document.getElementById('search-input')?.focus();
+        })
+      );
+      document.querySelectorAll('[data-search-close]').forEach(el =>
+        el.addEventListener('click', () => document.getElementById('search-overlay')?.classList.remove('open'))
+      );
+      // Search uses product data from data attribute on body
+      const searchInput = document.getElementById('search-input');
+      const searchResults = document.getElementById('search-results');
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          const q = searchInput.value.toLowerCase().trim();
+          if (!q || !window.__products) { searchResults.innerHTML = ''; return; }
+          const matches = window.__products.filter(p =>
+            p.name.toLowerCase().includes(q) || p.creator.toLowerCase().includes(q)
+          ).slice(0, 8);
+          searchResults.innerHTML = matches.map(p => `
+            <a href="/product/${p.id}" class="search-result-item">
+              <div class="search-result-img"><img src="${p.image}" alt="" /></div>
+              <div>
+                <div class="search-result-name">${p.name}</div>
+                <div class="search-result-price">${p.creator} — ¥${p.price.toLocaleString()}</div>
+              </div>
+            </a>
+          `).join('') || '<p style="color:var(--muted);font-size:13px;padding:16px 0;">該当する商品が見つかりません</p>';
+        });
+      }
+
+      // ===== Back to top =====
+      const backTop = document.getElementById('back-top');
+      window.addEventListener('scroll', () => {
+        backTop?.classList.toggle('visible', window.scrollY > 400);
+      });
+      backTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // ===== Page loader =====
+      const loader = document.getElementById('page-loader');
+      document.querySelectorAll('a[href^="/"]').forEach(a => {
+        a.addEventListener('click', () => loader?.classList.add('loading'));
+      });
+      window.addEventListener('load', () => {
+        loader?.classList.add('done');
+        setTimeout(() => { loader?.classList.remove('loading', 'done'); }, 300);
+      });
+
+      // ===== Init =====
+      updateCartBadge();
+      renderMiniCart();
+    </script>
   </body>
 </html>

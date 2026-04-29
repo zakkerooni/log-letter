@@ -6,23 +6,27 @@ const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x
 const creator = product.metadata?.creator || 'POST';
 ---
 
-<article class="product-card">
+<article class="product-card" data-creator={creator}>
   <a href={`/product/${product.id}`}>
     <div class="product-card-img">
-      <img
-        src={image}
-        alt={product.name}
-        loading="lazy"
-      />
+      <img src={image} alt={product.name} loading="lazy" />
+      <div class="product-card-quick">Quick View</div>
     </div>
     <p class="product-card-creator">{creator}</p>
     <p class="product-card-name">{product.name}</p>
     <p class="product-card-price">¥{amount.toLocaleString()}</p>
   </a>
-  <form action="/api/checkout" method="POST">
-    <input type="hidden" name="priceId" value={price?.id} />
-    <button type="submit" class="product-card-btn">
-      Add to Cart
-    </button>
-  </form>
+  <button
+    type="button"
+    class="product-card-btn"
+    data-add-cart
+    data-product-id={product.id}
+    data-price-id={price?.id}
+    data-name={product.name}
+    data-creator={creator}
+    data-image={image}
+    data-price={amount}
+  >
+    Add to Cart
+  </button>
 </article>

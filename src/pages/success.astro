@@ -20,3 +20,8 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 </Layout>
+
+<script>
+  // 決済完了後、カートをクリア
+  localStorage.removeItem('post-cart');
+</script>

@@ -9,11 +9,43 @@ import Stripe from 'stripe';
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const products = await stripe.products.list({ active: true, expand: ['data.default_price'] });
 
-// Picks: 先頭6件をカルーセルに、全件をアーカイブグリッドに
+// Also get inactive products for "sold out" display
+const allProducts = await stripe.products.list({ expand: ['data.default_price'] });
+const soldOutProducts = allProducts.data.filter(p => !p.active);
+
+// Picks: first 6 active products
 const picks = products.data.slice(0, 6);
+
+// Collect unique creators for filter
+const creators = [...new Set(products.data.map(p => p.metadata?.creator || 'POST'))];
+
+// Build product data for search
+const searchData = products.data.map(p => ({
+  id: p.id,
+  name: p.name,
+  creator: p.metadata?.creator || 'POST',
+  image: p.images?.[0] || '',
+  price: p.default_price?.unit_amount ?? 0,
+}));
 ---
 
 <Layout title="Home">
+  <!-- Search data for JS -->
+  <script define:vars={{ searchData }}>
+    window.__products = searchData;
+  </script>
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "POST — Postcard Library",
+    "description": "金沢のポストカード・ライブラリー。クリエイターの視点を届けるポストカードショップ。",
+    "url": Astro.url.origin,
+    "image": `${Astro.url.origin}/images/ogp.jpg`,
+    "address": { "@type": "PostalAddress", "addressLocality": "Kanazawa", "addressCountry": "JP" }
+  })} />
+
   <!-- Hero -->
   <section class="hero">
     <img
@@ -67,20 +99,50 @@ const picks = products.data.slice(0, 6);
 
   <!-- Archive Grid -->
   <section id="archive" class="products-section" style="border-top: 1px solid var(--border);">
-    <div style="text-align: center; margin-bottom: 56px;">
+    <div style="text-align: center; margin-bottom: 32px;">
       <span class="section-title-sm">{products.data.length} Records</span>
       <h2 class="section-title" style="margin-bottom: 0;">Library Archive</h2>
     </div>
-    <div class="product-grid">
+
+    <!-- Filter -->
+    {creators.length > 1 && (
+      <div class="filter-bar" data-filter-bar>
+        <button class="filter-btn active" data-filter="all">All</button>
+        {creators.map(c => (
+          <button class="filter-btn" data-filter={c}>{c}</button>
+        ))}
+      </div>
+    )}
+
+    <div class="product-grid" id="product-grid">
       {products.data.map((product) => <ProductCard product={product} />)}
     </div>
-  </section>
 
-  <div class="back-top" data-back-top>↑ Back to Top</div>
+    <!-- Sold out products -->
+    {soldOutProducts.length > 0 && (
+      <div class="product-grid" style="margin-top: 40px;">
+        {soldOutProducts.map((product) => {
+          const image = product.images?.[0] || '';
+          const creator = product.metadata?.creator || 'POST';
+          return (
+            <article class="product-card" style="opacity: 0.6; pointer-events: none;">
+              <div class="product-card-img">
+                <span class="sold-out-label">Sold Out</span>
+                <img src={image} alt={product.name} loading="lazy" />
+              </div>
+              <p class="product-card-creator">{creator}</p>
+              <p class="product-card-name">{product.name}</p>
+              <p class="product-card-price" style="text-decoration: line-through;">¥{(product.default_price?.unit_amount ?? 0).toLocaleString()}</p>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </section>
 </Layout>
 
 <script>
-  // Carousel navigation
+  // Carousel
   const track = document.querySelector('[data-carousel-track]');
   document.querySelector('[data-carousel-prev]')?.addEventListener('click', () => {
     track?.scrollBy({ left: -260, behavior: 'smooth' });
@@ -89,8 +151,21 @@ const picks = products.data.slice(0, 6);
     track?.scrollBy({ left: 260, behavior: 'smooth' });
   });
 
-  // Back to top
-  document.querySelector('[data-back-top]')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Filter
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('#product-grid .product-card').forEach(card => {
+        if (filter === 'all') {
+          card.style.display = '';
+        } else {
+          const creator = card.querySelector('.product-card-creator')?.textContent?.trim();
+          card.style.display = creator === filter ? '' : 'none';
+        }
+      });
+    });
   });
 </script>

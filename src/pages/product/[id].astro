@@ -8,22 +8,55 @@ import Stripe from 'stripe';
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const { id } = Astro.params;
 
-const product = await stripe.products.retrieve(id, { expand: ['default_price'] });
+let product;
+try {
+  product = await stripe.products.retrieve(id, { expand: ['default_price'] });
+} catch {
+  return Astro.redirect('/404');
+}
 if (!product || !product.active) {
-  return Astro.redirect('/');
+  return Astro.redirect('/404');
 }
 
 const price = product.default_price;
 const amount = price?.unit_amount ?? 0;
-const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST';
+const images = product.images?.length ? product.images : ['https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST'];
 const creator = product.metadata?.creator || 'POST';
 
-// Related products (same creator or random)
+// Related products
 const allProducts = await stripe.products.list({ active: true, expand: ['data.default_price'] });
 const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
+
+// Search data
+const searchData = allProducts.data.map(p => ({
+  id: p.id, name: p.name,
+  creator: p.metadata?.creator || 'POST',
+  image: p.images?.[0] || '', price: p.default_price?.unit_amount ?? 0,
+}));
 ---
 
 <Layout title={product.name}>
+  <script define:vars={{ searchData }}>
+    window.__products = searchData;
+  </script>
+
+  <!-- JSON-LD Product -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": images,
+    "description": product.description || '',
+    "brand": { "@type": "Brand", "name": "POST" },
+    "offers": {
+      "@type": "Offer",
+      "price": amount,
+      "priceCurrency": "JPY",
+      "availability": "https://schema.org/InStock",
+      "url": `${Astro.url.origin}/product/${product.id}`
+    }
+  })} />
+
   <div class="breadcrumb">
     <a href="/">Home</a>
     <span>/</span>
@@ -34,13 +67,23 @@ const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
 
   <div class="detail-page">
     <div class="detail-images">
-      <div class="detail-main-img">
-        <img src={image} alt={product.name} />
+      <div class="detail-main-img zooming" id="main-img-container">
+        <img src={images[0]} alt={product.name} id="main-img" />
+        {images.length > 1 && (
+          <Fragment>
+            <button class="detail-img-nav detail-img-prev" data-img-prev aria-label="Previous image">
+              <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            <button class="detail-img-nav detail-img-next" data-img-next aria-label="Next image">
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+          </Fragment>
+        )}
       </div>
-      {product.images && product.images.length > 1 && (
-        <div class="detail-thumbs">
-          {product.images.map((img, i) => (
-            <div class={`detail-thumb ${i === 0 ? 'active' : ''}`}>
+      {images.length > 1 && (
+        <div class="detail-thumbs" id="thumbs">
+          {images.map((img, i) => (
+            <div class={`detail-thumb ${i === 0 ? 'active' : ''}`} data-thumb-idx={i}>
               <img src={img} alt="" />
             </div>
           ))}
@@ -55,12 +98,19 @@ const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
       {product.description && (
         <p class="detail-desc">{product.description}</p>
       )}
-      <form action="/api/checkout" method="POST">
-        <input type="hidden" name="priceId" value={price?.id} />
-        <button type="submit" class="detail-buy-btn">
-          Add to Cart
-        </button>
-      </form>
+      <button
+        type="button"
+        class="detail-buy-btn"
+        data-add-cart
+        data-product-id={product.id}
+        data-price-id={price?.id}
+        data-name={product.name}
+        data-creator={creator}
+        data-image={images[0]}
+        data-price={amount}
+      >
+        Add to Cart
+      </button>
       <div class="detail-meta">
         <p>サイズ: 148mm × 100mm</p>
         <p>印刷: オフセット印刷 / マットコート紙 220g</p>
@@ -81,3 +131,45 @@ const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
     </section>
   )}
 </Layout>
+
+<script define:vars={{ images }}>
+  window.__detailImages = images;
+</script>
+<script>
+  const imgs = window.__detailImages || [];
+  let currentIdx = 0;
+  const mainImg = document.getElementById('main-img');
+  const container = document.getElementById('main-img-container');
+  const thumbs = document.querySelectorAll('[data-thumb-idx]');
+
+  function setImage(idx) {
+    if (!imgs[idx] || !mainImg) return;
+    currentIdx = idx;
+    mainImg.src = imgs[idx];
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+  }
+
+  // Arrow navigation
+  document.querySelector('[data-img-prev]')?.addEventListener('click', () => {
+    setImage((currentIdx - 1 + imgs.length) % imgs.length);
+  });
+  document.querySelector('[data-img-next]')?.addEventListener('click', () => {
+    setImage((currentIdx + 1) % imgs.length);
+  });
+
+  // Thumb clicks
+  thumbs.forEach(t => {
+    t.addEventListener('click', () => setImage(parseInt(t.dataset.thumbIdx)));
+  });
+
+  // Zoom on hover (follow cursor)
+  if (container) {
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width * 100);
+      const y = ((e.clientY - rect.top) / rect.height * 100);
+      container.style.setProperty('--zoom-x', x + '%');
+      container.style.setProperty('--zoom-y', y + '%');
+    });
+  }
+</script>
