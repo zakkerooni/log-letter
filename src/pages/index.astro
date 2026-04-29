@@ -5,40 +5,76 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const products = await stripe.products.list({ active: true, expand: ['data.default_price'] });
 ---
 
-<Layout title="Postcard Library">
-	<main class="max-w-[1400px] mx-auto px-6 py-20">
-		<header class="mb-16">
-			<h2 class="text-[11px] tracking-[0.4em] uppercase text-gray-400 mb-3 font-light">New Arrivals</h2>
-			<div class="w-12 h-[1px] bg-black"></div>
-		</header>
+<Layout title="Record of a moment">
+	<section class="h-screen w-full relative overflow-hidden bg-[#f2f2f2]">
+		<img 
+			src="/images/about-hero.jpg" 
+			alt="Concept Visual" 
+			class="w-full h-full object-cover grayscale-[10%] opacity-90 transition-transform duration-[3s] scale-105 hover:scale-100"
+			onerror="this.src='https://placehold.jp/24/000000/ffffff/1800x1200.png?text=MiKS%20Collection'"
+		/>
+		<div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+			<h2 class="text-[11px] tracking-[1em] uppercase text-white font-light mb-6 drop-shadow-sm">Postcard Collection</h2>
+			<div class="w-[1px] h-20 bg-white/40"></div>
+		</div>
+	</section>
 
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+	<section class="py-48 px-6 text-center bg-[#fdfdfd]">
+		<div class="max-w-[750px] mx-auto space-y-16">
+			<h3 class="text-[10px] tracking-[0.6em] uppercase text-gray-300 font-light">The Record of a Moment</h3>
+			<div class="text-[15px] tracking-[0.2em] font-light leading-[2.8] text-gray-700">
+				<p>
+					ポストカードは、ある瞬間の「記録」である。<br>
+					私たちはそう考えます。
+				</p>
+				<p>
+					金沢の静かな空気感や、クリエイターの視点が切り取った断片を、<br>
+					手に取れる形、届ける形へと。
+				</p>
+				<p>
+					MiKSは、クリエイターの創作活動を支援し、<br>
+					売上の一部は、次なる作品を生むための糧として作家へ還元されます。
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section id="archive" class="max-w-[1400px] mx-auto px-6 py-32 border-t border-[#f7f7f7]">
+		<div class="mb-24">
+			<h2 class="text-[11px] tracking-[0.5em] uppercase text-gray-400 font-light mb-2">Library Archive</h2>
+			<span class="text-[9px] text-gray-300 tracking-[0.3em] font-light">{products.data.length} Records</span>
+		</div>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-32">
 			{products.data.map((product) => (
-				<div class="flex flex-col h-full">
-					<div class="overflow-hidden bg-[#f2f2f2] aspect-[3/4] mb-8 group">
-						<img src={product.images[0]} alt={product.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" />
+				<div class="flex flex-col h-full group">
+					<div class="overflow-hidden bg-[#f8f8f8] aspect-[3/4] mb-10">
+						<img 
+							src={product.images[0]} 
+							alt={product.name} 
+							class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[1.5s] ease-out" 
+						/>
 					</div>
-					<div class="flex-grow space-y-3">
-						<div class="flex justify-between items-start gap-4">
-							<div class="min-h-[64px]">
-								<p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-2 font-light">
-									{product.metadata.creator || 'MiKS Collective'}
-								</p>
-								<h3 class="text-[13px] tracking-[0.1em] font-normal leading-relaxed">{product.name}</h3>
-							</div>
-							<span class="text-[12px] font-light pt-1">
-								¥{product.default_price ? product.default_price.unit_amount.toLocaleString() : '---'}
-							</span>
+					<div class="flex-grow space-y-5">
+						<p class="text-[9px] text-gray-400 uppercase tracking-[0.4em] font-light">
+							{product.metadata.creator || 'MiKS Collective'}
+						</p>
+						<div class="flex justify-between items-baseline border-b border-gray-100 pb-5">
+							<h3 class="text-[13px] tracking-[0.1em] font-normal text-[#333]">{product.name}</h3>
+							<span class="text-[11px] font-light text-gray-500 italic">¥{product.default_price?.unit_amount.toLocaleString()}</span>
 						</div>
+						<p class="text-[10px] text-gray-400 font-light leading-relaxed min-h-[40px]">
+							{product.description}
+						</p>
 					</div>
-					<form action="/api/checkout" method="POST" class="mt-8">
+					<form action="/api/checkout" method="POST" class="mt-12">
 						<input type="hidden" name="priceId" value={product.default_price?.id} />
-						<button type="submit" class="w-full border border-black py-4 text-[10px] tracking-[0.3em] uppercase hover:bg-black hover:text-white transition-all duration-500">
-							Add to Cart
+						<button type="submit" class="w-full border border-black py-4 text-[9px] tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all duration-700 ease-in-out">
+							Purchase
 						</button>
 					</form>
 				</div>
 			))}
 		</div>
-	</main>
+	</section>
 </Layout>

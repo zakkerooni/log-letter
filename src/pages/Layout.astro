@@ -1,7 +1,6 @@
 ---
 const { title } = Astro.props;
 const faviconUrl = import.meta.env.PUBLIC_FAVICON_URL || "/favicon.svg";
-const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || "#";
 ---
 
 <html lang="ja">
@@ -10,45 +9,30 @@ const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || "#";
 		<meta name="viewport" content="width=device-width" />
 		<title>{title} | MiKS</title>
 		<link rel="icon" type="image/svg+xml" href={faviconUrl} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-[#fdfdfd] text-[#1a1a1a] font-['Inter',_sans-serif] antialiased">
-		
-		<nav class="border-b border-[#e5e5e5] px-6 py-6 flex justify-between items-center sticky top-0 bg-[#fdfdfd]/90 backdrop-blur-md z-50">
+	<body class="bg-[#fdfdfd] text-[#1a1a1a] font-['Inter'] antialiased">
+		<nav class="fixed top-0 left-0 w-full px-6 py-8 flex justify-between items-center z-50 bg-[#fdfdfd]/40 backdrop-blur-sm transition-all duration-500 hover:bg-[#fdfdfd]/90">
 			<a href="/" class="flex items-center group">
-				<div class="relative">
-					<img 
-						src="/images/logo.png" 
-						alt="MiKS" 
-						class="h-5 w-auto object-contain"
-						onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
-					/>
-					<span class="text-xl tracking-[0.2em] font-light hidden">MiKS</span>
-				</div>
+				<img src="/images/logo.png" alt="MiKS" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+				<span class="text-lg tracking-[0.3em] font-light hidden">MiKS</span>
 			</a>
-			<div class="flex space-x-8 text-[10px] tracking-widest uppercase text-gray-500">
-				<a href="/" class="hover:text-black transition-colors">Items</a>
-				<a href="/about" class="hover:text-black transition-colors">About</a>
+			<div class="text-[9px] tracking-[0.4em] uppercase text-gray-400">
+				<a href="#archive" class="hover:text-black transition-colors">Archive</a>
 			</div>
 		</nav>
 
 		<slot />
 
 		<footer class="mt-40 border-t border-[#e5e5e5] px-6 py-24 bg-[#f9f9f9]">
-			<div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 text-[10px] tracking-[0.2em] text-gray-400 uppercase font-light">
+			<div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between gap-12 text-[9px] tracking-[0.3em] text-gray-400 uppercase font-light">
 				<div>
-					<p class="text-black mb-4 tracking-[0.3em] font-normal">MiKS inc.</p>
-					<p>Kanazawa, Ishikawa<br/>Japan</p>
+					<p class="text-black mb-4 font-normal tracking-[0.4em]">MiKS inc. / Kanazawa</p>
+					<p>© 2026 Record of a moment</p>
 				</div>
-				<div>
-					<p class="text-black mb-4 tracking-[0.3em] font-normal">Social</p>
-					<a href={instagramUrl} target="_blank" class="hover:text-black">Instagram</a>
-				</div>
-				<div>
-					<p class="text-black mb-4 tracking-[0.3em] font-normal">Inquiry</p>
-					<a href="/about" class="hover:text-black">Contact</a>
+				<div class="flex gap-12">
+					<a href="#" class="hover:text-black transition-colors">Instagram</a>
+					<a href="mailto:info@miks-inc.com" class="hover:text-black transition-colors">Contact</a>
 				</div>
 			</div>
 		</footer>
