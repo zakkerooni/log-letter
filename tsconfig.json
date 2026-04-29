@@ -1,5 +1,16 @@
-{
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
-}
+// @ts-check
+import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  output: 'server',
+  site: 'https://post-library.com',
+  adapter: cloudflare(),
+  integrations: [sitemap()],
+  vite: {
+    css: {
+      transformer: 'lightningcss',
+    },
+  },
+});
