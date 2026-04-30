@@ -34,9 +34,7 @@ export const POST = async ({ request }) => {
       phone_number_collection: {
         enabled: true, // 配送に便利な電話番号入力もオン
       },
-      consent_collection: {
-        promotions: 'auto', // プロモーションメールへの同意チェックボックスを表示
-      },
+
       // --- ここまで追加 ---
       success_url: `${new URL(request.url).origin}/success`,
       cancel_url: `${new URL(request.url).origin}/cart`,
