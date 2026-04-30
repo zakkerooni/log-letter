@@ -12,8 +12,8 @@
   --accent: #ff6400;
   --font-display: Georgia, serif;
   --font-body: Arial, sans-serif;
-  --font-jp: 'Zen Kaku Gothic New', sans-serif;
-  --font-jp-serif: 'Noto Serif JP', serif;
+  --font-jp: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  --font-jp-serif: "Yu Mincho", "游明朝", YuMincho, "Hiragino Mincho ProN", serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -312,8 +312,8 @@ img { display: block; max-width: 100%; }
   text-align: center;
 }
 .about-text {
-  font-family: var(--font-jp-serif);
-  font-size: 15px; font-weight: 300;
+  font-family: var(--font-jp);
+  font-size: 15px; font-weight: 400;
   line-height: 2.4; letter-spacing: 0.08em;
   color: #555;
 }
@@ -385,25 +385,33 @@ img { display: block; max-width: 100%; }
 }
 .detail-buy-btn {
   display: flex; width: 100%;
-  height: 48px; padding: 0 16px;
+  max-width: 450px;
+  height: 56px; padding: 0 16px;
   align-items: center; justify-content: center;
   background: var(--accent); color: #fff;
-  font-size: 13px; letter-spacing: 2px;
+  font-size: 14px; letter-spacing: 2px;
   font-family: var(--font-jp);
   font-weight: 500;
   border: 1px solid var(--accent);
   transition: all 0.3s;
   cursor: pointer;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .detail-buy-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-.detail-buy-btn.added { background: var(--fg); border-color: var(--fg); }
+.detail-buy-btn.added { background: var(--fg); border-color: var(--fg); color: #fff; }
 .detail-buy-btn.buy-cart {
-  background: #ffd72d; color: var(--fg); border-color: #ffd72d;
+  background: rgba(255, 100, 0, 0.3);
+  color: var(--fg);
+  border-color: rgba(255, 100, 0, 0.4);
+  font-weight: 700;
 }
-.detail-buy-btn.buy-cart:hover { background: #ffcd00; border-color: #ffcd00; }
+.detail-buy-btn.buy-cart:hover {
+  background: rgba(255, 100, 0, 0.45);
+  border-color: rgba(255, 100, 0, 0.55);
+}
 .detail-buy-btn.buy-now {
   background: var(--accent); color: #fff;
+  font-weight: 700;
 }
 
 /* Trust row */
