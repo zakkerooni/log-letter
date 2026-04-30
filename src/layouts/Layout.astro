@@ -82,7 +82,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
       <a href="/">Home</a>
       <a href="/#archive">Archive (Online Shop)</a>
       <a href="/about">About</a>
-      <a href="/cart">Cart</a>
+      <a href="/cart">カート</a>
       <a href={`mailto:${contactEmail}`}>Contact</a>
       <a href="/legal/tokushoho">特定商取引法に基づく表記</a>
       <a href="/legal/privacy">プライバシーポリシー</a>
@@ -99,7 +99,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
     <div class="mini-cart-overlay" id="mini-cart-overlay" data-mini-cart-close></div>
     <div class="mini-cart" id="mini-cart">
       <div class="mini-cart-header">
-        <span>Cart</span>
+        <span>カート</span>
         <button class="mini-cart-close" data-mini-cart-close>✕</button>
       </div>
       <div class="mini-cart-items" id="mini-cart-items"></div>
@@ -110,7 +110,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
         </div>
         <form action="/api/checkout" method="POST">
           <input type="hidden" name="cartData" id="mini-cart-data" />
-          <button type="submit" class="mini-cart-checkout">Checkout</button>
+          <button type="submit" class="mini-cart-checkout">レジに進む</button>
         </form>
         <a href="/#archive" class="mini-cart-continue" data-mini-cart-close>買い物を続ける</a>
       </div>
@@ -271,10 +271,17 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
             image: btn.dataset.image,
             price: parseInt(btn.dataset.price),
           });
-          btn.textContent = 'Added ✓';
+          btn.textContent = '追加しました ✓';
           btn.classList.add('added');
-          setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1500);
+          setTimeout(() => { btn.textContent = 'カートに入れる'; btn.classList.remove('added'); }, 1500);
         });
+      });
+
+      // Listen for cart-updated events from buy-now/qty buttons
+      document.addEventListener('cart-updated', (e) => {
+        updateCartBadge();
+        renderMiniCart();
+        if (e.detail?.msg) showToast(e.detail.msg);
       });
 
       document.querySelectorAll('[data-mini-cart-open]').forEach(el =>

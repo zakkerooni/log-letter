@@ -10,7 +10,7 @@ const creator = product.metadata?.creator || 'POST';
   <a href={`/product/${product.id}`}>
     <div class="product-card-img">
       <img src={image} alt={product.name} loading="lazy" />
-      <div class="product-card-quick">Quick View</div>
+      <div class="product-card-quick">クイックビュー</div>
     </div>
     <p class="product-card-creator">{creator}</p>
     <p class="product-card-name">{product.name}</p>
@@ -27,6 +27,6 @@ const creator = product.metadata?.creator || 'POST';
     data-image={image}
     data-price={amount}
   >
-    Add to Cart
+    カートに入れる
   </button>
 </article>
