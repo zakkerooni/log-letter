@@ -27,6 +27,17 @@ export const POST = async ({ request }) => {
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
+      // --- ここから追加 ---
+      shipping_address_collection: {
+        allowed_countries: ['JP'], // 日本国内の住所入力を有効にする
+      },
+      phone_number_collection: {
+        enabled: true, // 配送に便利な電話番号入力もオン
+      },
+      consent_collection: {
+        promotions: 'auto', // プロモーションメールへの同意チェックボックスを表示
+      },
+      // --- ここまで追加 ---
       success_url: `${new URL(request.url).origin}/success`,
       cancel_url: `${new URL(request.url).origin}/cart`,
     });
