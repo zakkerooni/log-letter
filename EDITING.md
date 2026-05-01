@@ -1,123 +1,238 @@
-# 編集ガイド（はじめに読むやつ）
+# 運用マニュアル
 
-このサイトは、コードをほぼ触らずに **文言・画像・色・フォント** を編集できるように整理されています。
-迷ったらまずこのファイルを開いてください。詳細リファレンスは [GUIDE.md](./GUIDE.md) にあります。
-
----
-
-## 1. 文言（コピー）を変える
-
-ほぼすべてのテキストは **1 つの JSON ファイル** に集まっています。
-
-📄 `src/content/site.ja.json`
-
-```jsonc
-"home": {
-  "heroTitle": "Postcard Library",     ← トップの大見出し
-  "heroSub":   "Kanazawa — Record of a Moment",
-  ...
-},
-"about": {
-  "heading": "The Record of a Moment",
-  "paragraphs": [
-    "ポストカードは、ある瞬間の「記録」である。…",
-    "金沢の静かな空気感や、…"
-  ]
-}
-```
-
-- `"キー": "値"` の **値（右側）だけ** を変更してください。キー名（左側）は変えないでください。
-- 段落を増やしたいときは `paragraphs` 配列に文字列を追加するだけ。
-- GitHub の Web エディタ（リポジトリで `.` を押す or ファイル右上の鉛筆アイコン）から直接編集できます。
-
-### 法務ページの文章
-
-📄 `src/content/legal/tokushoho.md` `privacy.md` `shipping.md`
-
-普通の Markdown として書けます。`# 見出し`、`- 箇条書き`、表（`| 項目 | 内容 |`）が使えます。
+このサイトの編集・公開・運用に必要なこと全部ここ。順番にチェックを潰せば公開まで行けます。
 
 ---
 
-## 2. 色・フォントを変える
+## 🟢 普段の編集 — TinaCMS で
 
-📄 `src/styles/tokens.json`
+ブラウザで [https://log-letter.com/admin](https://log-letter.com/admin) を開く。
+GitHub アカウントでログイン → 左サイドバーから編集対象を選択。
 
-```jsonc
-"color": {
-  "accent": { "value": "#ff6400", ... }   ← この値を変える
-}
-```
+### 編集できるもの
 
-### Figma と同期したい場合
+| サイドバー項目 | 内容 |
+|---|---|
+| 🔗 連絡先リンク | 株式会社MiKS お問い合わせ URL |
+| 🔍 SEO・メタ情報 | サイト名、description、OGP |
+| 🔝 ヘッダー | ロゴ、タグライン、ナビ |
+| 📱 モバイルメニュー | スマホ表示時のメニュー文言 |
+| 🏠 トップページ | ヒーロー、Picks、Archive |
+| 💭 コンセプト | トップ中段の概念文 |
+| 📖 About ページ | About 本文 |
+| 🛒 商品詳細 | 信頼バッジ、ボタン文言、配送案内 |
+| 🛍️ カート / ミニカート | カート画面の文言 |
+| 🔎 検索 | プレースホルダー |
+| 🍞 トースト | 通知文言 |
+| ✅ 購入完了 | success ページ |
+| ❓ 404 | Not Found |
+| 👣 フッター | 会社情報、リンク、コピーライト |
+| ⚖️ 法務ページタイトル | 特商法・プライバシー・配送のタイトル |
+| 📜 法務ページ本文 | 特商法・プライバシー・配送の本文 (Markdown) |
+| 🎨 デザイントークン | 色 (背景・テキスト・アクセント等) |
 
-1. Figma の **Tokens Studio** プラグインをインストール（[tokens.studio](https://tokens.studio/)）
-2. プラグイン内 `Settings → Sync providers` で **GitHub** を選択
-3. このリポジトリと `src/styles/tokens.json` を指定
-4. Figma 側で色やフォントを編集 → "Push to GitHub" でコミット
-5. Cloudflare Pages が自動で再デプロイ（1〜2 分で本番反映）
+### 反映までの流れ
 
-> 直接 `tokens.json` を編集しても OK。保存して Git に push するだけで反映されます。
+1. TinaCMS で編集 → **Save** ボタン
+2. 自動で GitHub に commit が立つ
+3. Cloudflare が 1〜2 分で再デプロイ
+4. `https://log-letter.com` に反映
 
----
+### コードを直接触る場合
 
-## 3. 画像を差し替える
+TinaCMS を経由せず手動で編集したい時は以下のファイルを GitHub Web エディタで開くだけ:
 
-`public/images/` に同じファイル名で上書きするだけ。
-
-| ファイル          | 用途                       | サイズ目安      |
-|-------------------|----------------------------|-----------------|
-| `hero.jpg`        | トップ最上部の大画像       | 1800 × 1000 px  |
-| `about-1.jpg`     | About ページ左側           | 800 × 1000 px   |
-| `about-2.jpg`     | About ページ右側           | 同上            |
-| `ogp.jpg`         | SNS シェア時のサムネイル   | 1200 × 630 px   |
-
-商品画像は **Stripe ダッシュボード** で管理（コード変更不要）。
-
----
-
-## 4. 商品の追加・編集
-
-すべて [Stripe ダッシュボード](https://dashboard.stripe.com/products) で完結します。
-
-| やりたいこと   | 方法                                                    |
-|----------------|---------------------------------------------------------|
-| 新商品追加     | Products → Create product（画像・価格を設定）           |
-| クリエイター名 | 商品 → Metadata → key=`creator`, value=`名前`          |
-| 売り切れ表示   | 商品 → Active を OFF（サイトでは "Sold Out" 表示）      |
-| 完全に非表示   | 商品 → Archive                                          |
+- 文言: [src/copy/site.ja.json](src/copy/site.ja.json)
+- 法務本文: [src/copy/legal/*.md](src/copy/legal/)
+- 色・フォント: [src/styles/tokens.json](src/styles/tokens.json) → 編集後にローカルで `npm run tokens` で `_tokens.css` 再生成 (もしくは TinaCMS 経由なら自動)
 
 ---
 
-## 5. 連絡先・SNS・お知らせバナー
+## 🛒 商品の追加・編集
 
-📄 `.env`（プロジェクトルート、ローカルだけ）  
-本番は **Cloudflare Pages の環境変数** に同じものを登録します。
+すべて [Stripe ダッシュボード](https://dashboard.stripe.com/products) で完結。コード変更不要。
 
-```env
-PUBLIC_BANNER_TEXT=送料無料キャンペーン中     # 空欄ならバナー非表示
-PUBLIC_INSTAGRAM_URL=https://instagram.com/yourname
-PUBLIC_CONTACT_EMAIL=info@your-domain.jp
-PUBLIC_GA_ID=G-XXXXXXXXXX                    # 空欄なら GA タグ挿入なし
-```
+| 操作 | 方法 |
+|---|---|
+| 新商品追加 | Products → Create product → Name / Description / Price / Image を設定 |
+| クリエイター名 | 商品 → Metadata → key=`creator`, value=`名前` |
+| 売り切れ表示 | 商品 → Active を OFF (サイトでは "Sold Out" 表示) |
+| 完全に非表示 | 商品 → Archive |
+
+Picks 表示は新しい順 6 件。
 
 ---
 
-## 6. 変更を本番に反映する
+## 🖼️ 画像の差し替え
 
-GitHub に push するだけ。Cloudflare Pages が約 1〜2 分で自動再デプロイします。
+`public/images/` に同じファイル名で上書きアップロード:
+
+| ファイル | 用途 | 推奨サイズ |
+|---|---|---|
+| `hero.jpg` | トップ最上部 | 1800 × 1000 px |
+| `about-1.jpg` | About 左 | 800 × 1000 px |
+| `about-2.jpg` | About 右 | 800 × 1000 px |
+| `ogp.jpg` | SNS シェア | 1200 × 630 px |
+
+GitHub Web エディタからドラッグ & ドロップで上げられます。
+商品画像は Stripe ダッシュボード側で管理。
+
+---
+
+# 🚀 本番公開チェックリスト (初回のみ)
+
+## ✅ 1. TinaCMS Cloud セットアップ
+
+1. [https://app.tina.io](https://app.tina.io) に GitHub アカウントでログイン
+2. **Create New Project** → **Import from GitHub** → `zakkerooni/POST` を選択
+3. Branch: `main`、Path to schema: `tina/config.ts`
+4. プロジェクト作成後、ダッシュボードに表示される:
+   - **Client ID** (`PUBLIC_TINA_CLIENT_ID` に使う)
+   - **Read-Only Token** はスキップ
+   - **Tokens** タブ → **+ New Token** で書き込みトークンを発行 (`TINA_TOKEN`)
+5. Cloudflare Worker `post` → Settings → Variables and Secrets:
+   - `PUBLIC_TINA_CLIENT_ID` (Variable)
+   - `TINA_TOKEN` (Secret)
+6. Worker を再デプロイ
+
+## ✅ 2. Stripe を本番モードに切替
+
+### 2-1. Live モード起動
+
+[Stripe Dashboard](https://dashboard.stripe.com/) → 左上トグル **テスト環境 → 本番環境** → アクティベート画面で事業者情報入力:
+
+| 項目 | 内容 |
+|---|---|
+| 事業形態 | 法人 |
+| 法人名 | 株式会社MiKS |
+| 法人番号 | [国税庁法人番号公表サイト](https://www.houjin-bangou.nta.go.jp/) で取得 |
+| 登記住所 | 〒920-0964 石川県金沢市本多町 3-5-10-201 |
+| 業種 | 一般商品 / アート・工芸品 |
+| ウェブサイト | https://log-letter.com |
+| 代表者 | 吉崎 努 (生年月日・住所・電話番号) |
+| 銀行口座 | 売上振込先 |
+| 本人確認書類 | 運転免許証 or マイナンバーカード |
+
+審査 1〜2 営業日。
+
+### 2-2. 本番商品登録 + Live キー差替
+
+1. Stripe Live モードで商品を登録 (Test の商品はコピーされない)
+2. Developers → API keys → **Live Secret key** (`sk_live_xxx`) をコピー
+3. Cloudflare Worker → Variables and Secrets → `STRIPE_SECRET_KEY` を `sk_live_xxx` に上書き → 保存 → 再デプロイ
+
+### 2-3. Webhook を本番に登録
+
+1. Stripe → Developers → Webhooks → **+ Add endpoint**
+2. URL: `https://log-letter.com/api/stripe-webhook`
+3. Events: `checkout.session.completed`
+4. **Signing secret** (`whsec_xxx`) をコピー
+5. Cloudflare → `STRIPE_WEBHOOK_SECRET` を `whsec_xxx` に上書き → 再デプロイ
+
+### 2-4. 本番テスト購入
+
+- 自分のクレカで 1 件決済 → success ページ → Stripe で確認 → 即返金
+
+---
+
+## ✅ 3. www サブドメイン追加
+
+Cloudflare → Workers & Pages → `post` → Settings → Domains & Routes → **+ Add → Custom Domain** → `www.log-letter.com`
+
+---
+
+## ✅ 4. メール転送 (Cloudflare Email Routing)
+
+`info@log-letter.com` 宛のメールを `info@miks-inc.com` に転送 + Gmail でフィルター。
+
+1. Cloudflare → Websites → `log-letter.com` → **Email** → **Email Routing** → **Get Started**
+2. **Add records and enable** で MX/TXT 自動追加
+3. **Destination addresses** タブ → `info@miks-inc.com` を追加 → 確認メール認証
+4. **Routing rules** タブ下部の **Catch-all address** → `Send to an email` → `info@miks-inc.com` → Active → Save
+
+### Gmail フィルター
+
+1. Gmail サイドバーの「ラベル」+ から `POST` ラベル作成
+2. 検索ボックスの絞り込みアイコン → **To** に `@log-letter.com` → フィルタを作成
+3. ☑ ラベルを付ける `POST` / ☑ 一致する既存スレッドにも適用 → **フィルタを作成**
+
+---
+
+## ✅ 5. SSL 強化 (Cloudflare)
+
+`log-letter.com` ゾーン → **SSL/TLS**:
+
+- **Overview** → 暗号化モード = **Full**
+- **Edge Certificates**:
+  - **Always Use HTTPS** ON
+  - **Automatic HTTPS Rewrites** ON
+  - **Minimum TLS Version** = `TLS 1.2`
+
+---
+
+## ✅ 6. Google Analytics
+
+1. [analytics.google.com](https://analytics.google.com) → プロパティ作成 → URL `https://log-letter.com`
+2. 測定 ID `G-XXXXXXXXXX` をコピー
+3. Cloudflare Worker → Variables → `PUBLIC_GA_ID` に追加 → 再デプロイ
+
+---
+
+## ✅ 7. Google Search Console
+
+1. [search.google.com/search-console](https://search.google.com/search-console) → プロパティ追加 → **ドメイン** → `log-letter.com`
+2. 表示される TXT レコードを Cloudflare DNS に追加
+3. 確認 → サイトマップに `sitemap-index.xml` を送信
+
+---
+
+## ✅ 8. その他 Cloudflare 設定
+
+- **Bots** → **Bot Fight Mode** ON
+- **Speed → Optimization** → **Brotli** ON
+- **Web Analytics** → Enable (GA より軽量、Cookie 不要)
+
+---
+
+## ✅ 9. 画像配置
+
+`public/images/` に最低限:
+
+- [ ] `ogp.jpg` (1200×630) — SNS シェア用、最優先
+- [ ] `hero.jpg` (1800×1000)
+- [ ] `about-1.jpg` `about-2.jpg` (各 800×1000)
+
+---
+
+## ✅ 10. 公開直前 最終確認
+
+- [ ] フッターに「by 株式会社MiKS」
+- [ ] `/legal/tokushoho` で代表者・所在地・メアド表示
+- [ ] フッターの Contact が miks-inc.com に飛ぶ
+- [ ] アドレスバーに 🔒
+- [ ] スマホ実機でも表示崩れなし
+- [ ] Twitter Card Validator (https://cards-dev.twitter.com/validator) で OGP 確認
+
+---
+
+# 🛠️ ローカル開発
 
 ```bash
-git add -A
-git commit -m "コピーを更新"
-git push
+npm install
+cp .env.example .env   # Stripe テストキー + TinaCMS Client ID/Token を記入
+npm run dev            # → http://localhost:4321
+                       # 管理画面 → http://localhost:4321/admin/index.html
 ```
 
-> GitHub Web エディタで編集 → "Commit changes" を押した時点で push と同じ扱いです。
+`.env` は git にコミットされません。
 
 ---
 
-## 7. 困ったら
+# 🔧 トラブルシューティング
 
-- 開発サーバを起動: `npm install && npm run dev` → http://localhost:4321
-- 詳しい編集ポイント・CSS 調整・本番公開手順 → [GUIDE.md](./GUIDE.md)
-- JSON が壊れて画面がエラーに → 直前のコミットに戻す（GitHub の「History」から）
+| 症状 | 対処 |
+|---|---|
+| `/admin` を開いてもログイン画面が出ない | TinaCMS Cloud の Client ID が Cloudflare 環境変数に設定されているか確認 |
+| 編集を保存できない | TINA_TOKEN が正しいか、Token に Read/Write 権限があるか |
+| 公開反映されない | Cloudflare → Workers & Pages → `post` → Deployments で最新デプロイが Active か確認 |
+| ビルド失敗 | Cloudflare の Build ログ確認。直近の失敗パターンは `package-lock.json` がコミットされた場合 (`.gitignore` 済み) |

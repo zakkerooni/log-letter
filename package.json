@@ -6,8 +6,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "tinacms dev -c \"astro dev\"",
+    "build": "node scripts/build.mjs",
     "preview": "astro preview",
     "tokens": "node scripts/build-tokens.mjs",
     "astro": "astro"
@@ -16,8 +16,10 @@
     "@astrojs/cloudflare": "^13.2.2",
     "@astrojs/sitemap": "^3.3.0",
     "@tailwindcss/vite": "^4.2.4",
+    "@tinacms/cli": "^2.2.5",
     "astro": "^6.1.10",
     "stripe": "^22.1.0",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.2.4",
+    "tinacms": "^3.7.5"
   }
 }
