@@ -1,10 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import site from '../../content/site.ja.json';
-import { getEntry, render } from 'astro:content';
-
-const entry = await getEntry('legal', 'privacy');
-const { Content } = await render(entry);
+import site from '../../copy/site.ja.json';
+import { Content } from '../../copy/legal/privacy.md';
 ---
 
 <Layout title={site.legal.privacyTitle}>
