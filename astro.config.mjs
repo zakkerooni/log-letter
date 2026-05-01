@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  site: 'https://post-library.com', // ← 本番ドメインに変更
+  site: 'https://log-letter.com',
   adapter: cloudflare(),
   integrations: [sitemap()],
   vite: {

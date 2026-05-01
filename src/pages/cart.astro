@@ -1,21 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import site from '../content/site.ja.json';
 ---
 
-<Layout title="Cart">
+<Layout title={site.cart.heading}>
   <div class="breadcrumb">
     <a href="/">Home</a>
     <span>/</span>
-    Cart
+    {site.cart.heading}
   </div>
 
-  <section style="max-width: 800px; margin: 0 auto; padding: 40px 40px 100px;">
-    <h1 class="section-title" style="margin-bottom: 48px;">Cart</h1>
+  <section style="max-width: 800px; margin: 0 auto; padding: 40px 40px 100px;" data-remove-label={site.cart.remove}>
+    <h1 class="section-title" style="margin-bottom: 48px;">{site.cart.heading}</h1>
 
     <div id="cart-empty" style="display: none; text-align: center; padding: 60px 0;">
-      <p style="font-family: var(--font-jp); color: var(--muted); font-size: 14px;">カートは空です</p>
+      <p style="font-family: var(--font-jp); color: var(--muted); font-size: 14px;">{site.cart.empty}</p>
       <a href="/#archive" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px; margin-top: 32px;">
-        Back to Archive
+        {site.cart.backToArchive}
       </a>
     </div>
 
@@ -23,17 +24,17 @@ import Layout from '../layouts/Layout.astro';
 
     <div id="cart-footer" style="display: none; border-top: 1px solid var(--border); padding-top: 32px; margin-top: 32px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <span style="font-family: var(--font-body); font-size: 14px; letter-spacing: 1px;">合計</span>
+        <span style="font-family: var(--font-body); font-size: 14px; letter-spacing: 1px;">{site.cart.totalLabel}</span>
         <span id="cart-total" style="font-family: var(--font-display); font-size: 24px; letter-spacing: 1px;"></span>
       </div>
       <form action="/api/checkout" method="POST">
         <input type="hidden" name="cartData" id="cart-data-input" />
         <button type="submit" class="detail-buy-btn" style="width: 100%;">
-          Checkout
+          {site.cart.checkout}
         </button>
       </form>
       <a href="/#archive" style="display: block; text-align: center; margin-top: 16px; font-size: 11px; letter-spacing: 1px; color: var(--muted); font-family: var(--font-body); transition: color 0.3s;">
-        買い物を続ける
+        {site.cart.continue}
       </a>
     </div>
   </section>
@@ -118,6 +119,7 @@ import Layout from '../layouts/Layout.astro';
     emptyEl.style.display = 'none';
     footerEl.style.display = 'block';
 
+    const removeLabel = document.querySelector('[data-remove-label]')?.dataset.removeLabel || '';
     let total = 0;
     itemsEl.innerHTML = cart.map((item, i) => {
       total += item.price * item.qty;
@@ -137,7 +139,7 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <div style="text-align: right;">
             <div class="cart-item-price">¥${(item.price * item.qty).toLocaleString()}</div>
-            <button class="cart-remove" data-remove="${i}">削除</button>
+            <button class="cart-remove" data-remove="${i}">${removeLabel}</button>
           </div>
         </div>
       `;

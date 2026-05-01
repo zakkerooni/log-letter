@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import AboutBlock from '../components/AboutBlock.astro';
 import ProductCard from '../components/ProductCard.astro';
 import Stripe from 'stripe';
+import site from '../content/site.ja.json';
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const products = await stripe.products.list({ active: true, expand: ['data.default_price'] });
@@ -39,24 +40,24 @@ const searchData = products.data.map(p => ({
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": "POST — Postcard Library",
-    "description": "金沢のポストカード・ライブラリー。クリエイターの視点を届けるポストカードショップ。",
+    "name": site.meta.storeJsonLdName,
+    "description": site.meta.storeJsonLdDescription,
     "url": Astro.url.origin,
     "image": `${Astro.url.origin}/images/ogp.jpg`,
-    "address": { "@type": "PostalAddress", "addressLocality": "Kanazawa", "addressCountry": "JP" }
+    "address": { "@type": "PostalAddress", "addressLocality": site.meta.addressLocality, "addressCountry": site.meta.addressCountry }
   })} />
 
   <!-- Hero -->
   <section class="hero">
     <img
       src="/images/hero.jpg"
-      alt="POST Postcard Library"
+      alt={site.meta.siteSuffix}
       class="hero-img"
       onerror="this.style.display='none'"
     />
     <div class="hero-overlay">
-      <h1 class="hero-title">Postcard Library</h1>
-      <p class="hero-sub">Kanazawa — Record of a Moment</p>
+      <h1 class="hero-title">{site.home.heroTitle}</h1>
+      <p class="hero-sub">{site.home.heroSub}</p>
     </div>
   </section>
 
@@ -66,8 +67,8 @@ const searchData = products.data.map(p => ({
   <!-- Picks Carousel -->
   <section style="padding: 0 0 80px;">
     <div style="text-align: center; padding: 0 40px 48px;">
-      <span class="section-title-sm">Latest</span>
-      <h2 class="section-title" style="margin-bottom: 0;">Picks</h2>
+      <span class="section-title-sm">{site.home.picksLabelSm}</span>
+      <h2 class="section-title" style="margin-bottom: 0;">{site.home.picksHeading}</h2>
     </div>
     <div class="carousel-section">
       <button class="carousel-nav carousel-prev" aria-label="Previous" data-carousel-prev>
@@ -100,14 +101,14 @@ const searchData = products.data.map(p => ({
   <!-- Archive Grid -->
   <section id="archive" class="products-section" style="border-top: 1px solid var(--border);">
     <div style="text-align: center; margin-bottom: 32px;">
-      <span class="section-title-sm">{products.data.length} Records</span>
-      <h2 class="section-title" style="margin-bottom: 0;">Library Archive</h2>
+      <span class="section-title-sm">{products.data.length} {site.home.archiveRecordsSuffix}</span>
+      <h2 class="section-title" style="margin-bottom: 0;">{site.home.archiveHeading}</h2>
     </div>
 
     <!-- Filter -->
     {creators.length > 1 && (
       <div class="filter-bar" data-filter-bar>
-        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn active" data-filter="all">{site.home.filterAll}</button>
         {creators.map(c => (
           <button class="filter-btn" data-filter={c}>{c}</button>
         ))}
@@ -127,7 +128,7 @@ const searchData = products.data.map(p => ({
           return (
             <article class="product-card" style="opacity: 0.6; pointer-events: none;">
               <div class="product-card-img">
-                <span class="sold-out-label">Sold Out</span>
+                <span class="sold-out-label">{site.product.soldOut}</span>
                 <img src={image} alt={product.name} loading="lazy" />
               </div>
               <p class="product-card-creator">{creator}</p>

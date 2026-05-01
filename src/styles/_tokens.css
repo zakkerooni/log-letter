@@ -1,0 +1,18 @@
+/* AUTO-GENERATED from src/styles/tokens.json — DO NOT EDIT BY HAND.
+   トークン値を変更したい場合は tokens.json を編集してください。 */
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #888888;
+  --border: #e0e0e0;
+  --card-bg: #f6f5f3;
+  --accent: #ff6400;
+  --font-display: Georgia, serif;
+  --font-body: Arial, sans-serif;
+  --font-jp: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+  --font-jp-serif: "Yu Mincho", "游明朝", YuMincho, "Hiragino Mincho ProN", serif;
+  --logo-main: 32px;
+  --hero-title: 48px;
+  --section-title: 24px;
+  --max-width: 1400px;
+}

@@ -1,5 +1,9 @@
 # POST Shop — 編集ガイド
 
+> **はじめての方へ**: まず [EDITING.md](./EDITING.md) を読んでください。
+> サイト全体の文言は `src/content/site.ja.json`、デザイントークン（色・フォント）は `src/styles/tokens.json` に集約されています。
+> このファイルは詳細リファレンス・本番公開手順・カスタマイズ Tips です。
+
 ## 目次
 1. [環境変数（.env）](#環境変数env)
 2. [バナー（お知らせバー）](#バナーお知らせバー)
@@ -89,52 +93,28 @@ PUBLIC_GA_ID=G-XXXXXXXXXX
 
 ## 文章の変更
 
-### トップページ
+**ほぼ全ての文言は `src/content/site.ja.json` の一箇所に集約されています。**
+キー名（左側）はそのまま、値（右側の文字列）だけを編集してください。
 
-| 文章 | ファイル | 探し方 |
-|---|---|---|
-| ヒーロータイトル | `src/pages/index.astro` | `<h1 class="hero-title">` |
-| ヒーローサブテキスト | `src/pages/index.astro` | `<p class="hero-sub">` |
-| Picksセクション見出し | `src/pages/index.astro` | `Picks` で検索 |
-| Archiveセクション見出し | `src/pages/index.astro` | `Library Archive` で検索 |
-
-### コンセプト（トップ＆About共通）
-
-| 文章 | ファイル |
+| セクション | site.ja.json のキー |
 |---|---|
-| コンセプト見出し | `src/components/AboutBlock.astro` — `<h2>` |
-| コンセプト文 | `src/components/AboutBlock.astro` — `<div class="about-text">` 内 |
+| ヘッダー（ロゴ・tagline・ナビ） | `header.*` |
+| モバイルメニュー | `mobileNav.*` |
+| ヒーロー | `home.heroTitle`, `home.heroSub` |
+| Picks / Archive 見出し | `home.picksHeading`, `home.archiveHeading` |
+| コンセプト（トップ＆About共通） | `concept.heading`, `concept.paragraphs[]` |
+| About ページ本文 | `about.heading`, `about.paragraphs[]` |
+| 商品詳細（信頼バッジ・ボタン・メタ情報） | `product.*` |
+| カート | `cart.*` |
+| 購入完了 | `success.*` |
+| 404 | `notFound.*` |
+| フッター（会社情報・リンク・著作権） | `footer.*` |
+| 法務ページタイトル | `legal.*` |
 
-### Aboutページ
-
-| 文章 | ファイル |
-|---|---|
-| About見出し | `src/pages/about.astro` — `<h2>` |
-| About本文 | `src/pages/about.astro` — `<div class="about-text">` 内の `<p>` |
-| 「Back to Archive」ボタン文言 | `src/pages/about.astro` — `<a>` |
-
-### 商品詳細
-
-| 文章 | ファイル |
-|---|---|
-| 商品メタ情報（サイズ等） | `src/pages/product/[id].astro` — `<div class="detail-meta">` 内 |
-| 「Add to Cart」ボタン | `src/pages/product/[id].astro` — `<button>` |
-
-### ヘッダー・フッター
-
-| 文章 | ファイル |
-|---|---|
-| ロゴテキスト「POST」 | `src/layouts/Layout.astro` — `<a class="logo-main">` |
-| ロゴ上の tagline | `src/layouts/Layout.astro` — 1つ目の `<span class="logo-tagline">` |
-| ロゴ下の tagline | `src/layouts/Layout.astro` — 2つ目の `<span class="logo-tagline">` |
-| フッター会社情報 | `src/layouts/Layout.astro` — footer内 |
-| フッター著作権表示 | `src/layouts/Layout.astro` — `<div class="footer-bottom">` |
-
-### 購入完了
-
-| 文章 | ファイル |
-|---|---|
-| 完了メッセージ | `src/pages/success.astro` — `<div class="about-text">` 内 |
+法務ページの本文は Markdown で:
+- 特定商取引法: `src/content/legal/tokushoho.md`
+- プライバシーポリシー: `src/content/legal/privacy.md`
+- 配送・返品ポリシー: `src/content/legal/shipping.md`
 
 ---
 
@@ -189,28 +169,30 @@ PUBLIC_GA_ID=G-XXXXXXXXXX
 
 ## 色・フォント・デザイン
 
-`src/styles/global.css` の `:root` で一括管理：
+**色とフォントは `src/styles/tokens.json` で一括管理。** Figma Tokens Studio と同期可能です。
 
-```css
-:root {
-  --bg: #ffffff;        /* 背景色 */
-  --fg: #1a1a1a;        /* テキスト色 */
-  --muted: #888;        /* サブテキスト色 */
-  --border: #e0e0e0;    /* ボーダー色 */
-  --card-bg: #f6f5f3;   /* カード背景色 */
-  --accent: #ff6400;    /* アクセント色（バナー・カート・購入ボタン） */
+```jsonc
+"color": {
+  "bg":     { "value": "#ffffff" },   // 背景色
+  "fg":     { "value": "#1a1a1a" },   // テキスト色
+  "muted":  { "value": "#888888" },   // サブテキスト色
+  "border": { "value": "#e0e0e0" },   // ボーダー色
+  "cardBg": { "value": "#f6f5f3" },   // カード背景色
+  "accent": { "value": "#ff6400" }    // アクセント色（バナー・カート・購入ボタン）
 }
 ```
 
-### フォント変更
-同じく `:root` 内：
-```css
-  --font-display: Georgia, serif;              /* 見出し */
-  --font-body: Arial, sans-serif;              /* 本文・UI */
-  --font-jp: 'Zen Kaku Gothic New', sans-serif; /* 日本語本文 */
-  --font-jp-serif: 'Noto Serif JP', serif;     /* 日本語セリフ */
-```
-Google Fontsを変更する場合は `Layout.astro` の `<link>` も更新。
+`tokens.json` を編集すると、`npm run dev` / `npm run build` 時に `src/styles/_tokens.css` が自動再生成され、サイト全体に反映されます。
+
+### Figma Tokens Studio との同期
+
+1. Figma で [Tokens Studio](https://tokens.studio/) プラグインをインストール
+2. Sync Provider で GitHub を選択 → このリポジトリ + `src/styles/tokens.json` を指定
+3. Figma 内で色・フォントを編集 → "Push to GitHub" でコミット
+4. Cloudflare Pages が自動再デプロイ
+
+### Google Fonts の変更
+`Layout.astro` の `<link href="https://fonts.googleapis.com/...">` を更新し、`tokens.json` の `font.jp` などを新しい family 名に書き換え。
 
 ### 主要なサイズ調整
 | 項目 | CSS | デフォルト |
@@ -267,13 +249,15 @@ Google Fontsを変更する場合は `Layout.astro` の `<link>` も更新。
 
 ## 法的ページ
 
-**⚠️ 公開前に必ず記入してください：**
+**⚠️ 公開前に必ず記入してください：** 本文は Markdown で編集できます。
 
 | ページ | ファイル | 要記入箇所 |
 |---|---|---|
-| 特定商取引法 | `src/pages/legal/tokushoho.astro` | 責任者名、住所、電話番号、販売URL |
-| プライバシーポリシー | `src/pages/legal/privacy.astro` | 必要に応じて内容を確認・修正 |
-| 配送・返品 | `src/pages/legal/shipping.astro` | 送料、配送方法、日数を実態に合わせて修正 |
+| 特定商取引法 | `src/content/legal/tokushoho.md` | 責任者名、住所、電話番号、販売URL |
+| プライバシーポリシー | `src/content/legal/privacy.md` | 必要に応じて内容を確認・修正 |
+| 配送・返品 | `src/content/legal/shipping.md` | 送料、配送方法、日数を実態に合わせて修正 |
+
+ページタイトルは `src/content/site.ja.json` の `legal.*` で管理。
 
 ---
 
@@ -335,39 +319,109 @@ shipping_address_collection: {
 ## ファイル構成
 
 ```
-astro/
-├── .env.example          ← コピーして .env を作成
-├── GUIDE.md              ← このファイル
-├── astro.config.mjs      ← Astro設定（サイトURL・プラグイン）
+.
+├── .env.example                ← コピーして .env を作成
+├── EDITING.md                  ← 非エンジニア向け編集ガイド（はじめに読む）
+├── GUIDE.md                    ← このファイル（詳細リファレンス）
+├── astro.config.mjs            ← Astro設定（サイトURL・プラグイン）
 ├── package.json
-├── tsconfig.json
+├── scripts/
+│   └── build-tokens.mjs        ← tokens.json → _tokens.css 変換
 ├── public/
 │   ├── favicon.svg
 │   └── images/
-│       ├── hero.jpg      ← ヒーロー画像
-│       ├── about-1.jpg   ← About画像（左）
-│       ├── about-2.jpg   ← About画像（右）
-│       └── ogp.jpg       ← OGP画像
+│       ├── hero.jpg            ← ヒーロー画像
+│       ├── about-1.jpg         ← About画像（左）
+│       ├── about-2.jpg         ← About画像（右）
+│       └── ogp.jpg             ← OGP画像
 └── src/
+    ├── content/
+    │   ├── config.ts           ← Astro Content Collections 定義
+    │   ├── site.ja.json        ← ★ サイト全体の文言（編集 OK）
+    │   └── legal/
+    │       ├── tokushoho.md    ← ★ 特商法本文（編集 OK）
+    │       ├── privacy.md      ← ★ プライバシーポリシー本文（編集 OK）
+    │       └── shipping.md     ← ★ 配送・返品ポリシー本文（編集 OK）
     ├── components/
-    │   ├── AboutBlock.astro    ← コンセプトブロック
-    │   └── ProductCard.astro   ← 商品カード
+    │   ├── AboutBlock.astro
+    │   └── ProductCard.astro
     ├── layouts/
-    │   └── Layout.astro        ← 共通レイアウト（ヘッダー・フッター・カート・検索）
+    │   └── Layout.astro
     ├── pages/
-    │   ├── 404.astro           ← Not Found
-    │   ├── about.astro         ← Aboutページ
-    │   ├── cart.astro          ← カートページ
-    │   ├── index.astro         ← トップページ
-    │   ├── success.astro       ← 購入完了
+    │   ├── 404.astro
+    │   ├── about.astro
+    │   ├── cart.astro
+    │   ├── index.astro
+    │   ├── success.astro
     │   ├── api/
-    │   │   └── checkout.js     ← Stripe決済API
+    │   │   ├── checkout.js         ← Stripe Checkout
+    │   │   └── stripe-webhook.js   ← Stripe Webhook 受信
     │   ├── legal/
-    │   │   ├── privacy.astro   ← プライバシーポリシー
-    │   │   ├── shipping.astro  ← 配送・返品ポリシー
-    │   │   └── tokushoho.astro ← 特商法表記
+    │   │   ├── privacy.astro       ← (本文は md から読込)
+    │   │   ├── shipping.astro
+    │   │   └── tokushoho.astro
     │   └── product/
-    │       └── [id].astro      ← 商品詳細（動的ルート）
+    │       └── [id].astro
     └── styles/
+        ├── tokens.json         ← ★ デザイントークン（色・フォント、編集 OK）
+        ├── _tokens.css         ← 自動生成（編集禁止）
         └── global.css          ← 全スタイル
 ```
+
+★ マークが、コードを触らずに編集できるファイルです。
+
+---
+
+## 本番公開フロー
+
+### 1. Stripe テスト → 本番切替
+
+ローカル `.env` ではテストキー (`sk_test_...`)、本番は Cloudflare Pages の環境変数に **ライブキー** を設定します。
+
+#### 事前チェック（テストモードで）
+
+- [ ] テストカード `4242 4242 4242 4242` で全フロー（商品閲覧 → カート → checkout → 成功ページ）を確認
+- [ ] `src/content/legal/*.md` の本文を完成（特商法の事業者情報は必須）
+- [ ] `public/images/hero.jpg` `about-1.jpg` `about-2.jpg` `ogp.jpg` を配置
+- [ ] `astro.config.mjs` の `site` を本番ドメインに変更
+
+#### 本番切替
+
+1. Stripe Dashboard 右上の **Test mode** を OFF（Live モードに）
+2. Live モードで本番商品を登録（画像・価格・metadata.creator）
+3. Cloudflare Pages → プロジェクト → Settings → Environment variables に登録：
+   - `STRIPE_SECRET_KEY` = `sk_live_xxx`
+   - `STRIPE_WEBHOOK_SECRET` = `whsec_xxx`（次の手順で取得）
+   - `PUBLIC_INSTAGRAM_URL` `PUBLIC_CONTACT_EMAIL` `PUBLIC_GA_ID` `PUBLIC_BANNER_TEXT`
+4. Stripe Dashboard → Developers → Webhooks → **Add endpoint**
+   - URL: `https://<本番ドメイン>/api/stripe-webhook`
+   - イベント: `checkout.session.completed`
+   - 表示される **Signing secret** (`whsec_...`) を Cloudflare 環境変数に登録
+5. Cloudflare Pages を再デプロイ
+6. **本番テスト**: 自分のクレジットカードで 1 件購入 → success ページに到達 → Stripe Dashboard で支払い確認 → 即返金
+
+### 2. 独自ドメイン公開（お名前.com → Cloudflare）
+
+1. **お名前.com でドメインを取得**
+   - 候補名で検索 → 取得（`.jp` `.com` `.shop` 等）
+2. **Cloudflare に登録**
+   - Cloudflare ダッシュボード → サイトを追加 → 取得したドメインを入力
+   - 提示される 2 つのネームサーバー（`xxx.ns.cloudflare.com`）をメモ
+3. **お名前.com のネームサーバーを変更**
+   - ドメイン Navi → ネームサーバー設定 → 「他のネームサーバーを利用」
+   - Cloudflare の 2 つのネームサーバーを入力 → 確認
+   - 委任完了まで数分〜数時間（Cloudflare ダッシュで Active になれば OK）
+4. **Cloudflare Pages にカスタムドメイン追加**
+   - Pages プロジェクト → Custom domains → Set up a custom domain
+   - 本番ドメイン名を入力 → 自動で SSL 証明書発行
+5. **コード側の更新**
+   - `astro.config.mjs` の `site:` を本番ドメインに変更 → push → 自動再デプロイ
+   - Stripe の Webhook URL も `https://<本番ドメイン>/api/stripe-webhook` に更新
+
+### 3. メール（任意）
+
+問い合わせ用メール `info@<domain>` は:
+- **お名前.com のメール転送** 機能を使う、または
+- **Cloudflare Email Routing**（無料・推奨）で別 Gmail 等に転送
+
+設定後、`PUBLIC_CONTACT_EMAIL` 環境変数とフッター・特商法ページのメールアドレスを更新。

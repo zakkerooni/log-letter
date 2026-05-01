@@ -4,6 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import Stripe from 'stripe';
+import site from '../../content/site.ja.json';
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const { id } = Astro.params;
@@ -94,35 +95,33 @@ const searchData = allProducts.data.map(p => ({
     <div class="detail-info">
       <p class="detail-creator">{creator}</p>
       <h1 class="detail-name">{product.name}</h1>
-      <p class="detail-price">¥{amount.toLocaleString()} <span style="font-size: 11px; color: var(--muted); margin-left: 8px;">税込</span></p>
+      <p class="detail-price">¥{amount.toLocaleString()} <span style="font-size: 11px; color: var(--muted); margin-left: 8px;">{site.product.taxNote}</span></p>
 
       <!-- 信頼バッジ -->
       <div class="trust-row">
         <div class="trust-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-6 9 6v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 21V11h6v10"/></svg>
-          <span>3営業日以内発送</span>
+          <span>{site.product.trustShip}</span>
         </div>
         <div class="trust-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          <span>カード決済（Stripe）</span>
+          <span>{site.product.trustPay}</span>
         </div>
         <div class="trust-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>SSL暗号化通信</span>
+          <span>{site.product.trustSsl}</span>
         </div>
       </div>
 
       <!-- 在庫表示 -->
       <p class="stock-status">
         <span class="stock-dot"></span>
-        <strong>在庫あり</strong>
-        <span style="color: var(--muted); margin-left: 8px;">残りわずか</span>
+        <strong>{site.product.stockLabel}</strong>
+        <span style="color: var(--muted); margin-left: 8px;">{site.product.stockNote}</span>
       </p>
 
       <!-- 配送目安 -->
-      <p class="delivery-info">
-        <strong>無料配送（¥2,000以上）</strong>　本日ご注文で <strong>明日発送予定</strong>
-      </p>
+      <p class="delivery-info" set:html={site.product.deliveryNote}></p>
 
       {product.description && (
         <p class="detail-desc">{product.description}</p>
@@ -130,7 +129,7 @@ const searchData = allProducts.data.map(p => ({
 
       <!-- 数量 -->
       <div class="qty-selector">
-        <label>数量</label>
+        <label>{site.product.qtyLabel}</label>
         <div class="qty-control">
           <button type="button" data-qty-dec aria-label="減らす">−</button>
           <input type="number" id="qty-input" value="1" min="1" max="10" />
@@ -150,7 +149,7 @@ const searchData = allProducts.data.map(p => ({
         data-image={images[0]}
         data-price={amount}
       >
-        カートに入れる
+        {site.product.addToCart}
       </button>
       <button
         type="button"
@@ -163,14 +162,14 @@ const searchData = allProducts.data.map(p => ({
         data-image={images[0]}
         data-price={amount}
       >
-        すぐ購入する
+        {site.product.buyNow}
       </button>
 
       <div class="detail-meta">
-        <p>サイズ: 148mm × 100mm</p>
-        <p>印刷: オフセット印刷 / マットコート紙 220g</p>
-        <p>発送: ご注文から3営業日以内</p>
-        <p>送料: 全国一律 ¥200（¥2,000以上で送料無料）</p>
+        <p>{site.product.metaSize}</p>
+        <p>{site.product.metaPrint}</p>
+        <p>{site.product.metaShip}</p>
+        <p>{site.product.metaFee}</p>
       </div>
     </div>
   </div>
@@ -179,7 +178,7 @@ const searchData = allProducts.data.map(p => ({
   {related.length > 0 && (
     <section class="products-section related-section" style="border-top: 1px solid var(--border);">
       <div style="text-align: center; margin-bottom: 48px;">
-        <h2 class="section-title" style="margin-bottom: 0;">Related Cards</h2>
+        <h2 class="section-title" style="margin-bottom: 0;">{site.product.relatedHeading}</h2>
       </div>
       <div class="product-grid related-grid">
         {related.map((p) => <ProductCard product={p} />)}

@@ -1,4 +1,5 @@
 ---
+import site from '../content/site.ja.json';
 const { product } = Astro.props;
 const price = product.default_price;
 const amount = price?.unit_amount ?? 0;
@@ -10,7 +11,7 @@ const creator = product.metadata?.creator || 'POST';
   <a href={`/product/${product.id}`}>
     <div class="product-card-img">
       <img src={image} alt={product.name} loading="lazy" />
-      <div class="product-card-quick">クイックビュー</div>
+      <div class="product-card-quick">{site.product.quickView}</div>
     </div>
     <p class="product-card-creator">{creator}</p>
     <p class="product-card-name">{product.name}</p>
@@ -27,6 +28,6 @@ const creator = product.metadata?.creator || 'POST';
     data-image={image}
     data-price={amount}
   >
-    カートに入れる
+    {site.product.addToCart}
   </button>
 </article>

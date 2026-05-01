@@ -1,10 +1,10 @@
 ---
 import '../styles/global.css';
+import site from '../content/site.ja.json';
 
 const { title } = Astro.props;
 const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://instagram.com';
-const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'info@miks-inc.com';
-const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || 'GW期間中の配送について — 4/29〜5/6は発送をお休みいたします';
+const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || '';
 const gaId = import.meta.env.PUBLIC_GA_ID || '';
 ---
 
@@ -13,10 +13,10 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} | POST — Postcard Library</title>
-    <meta name="description" content="金沢、ポストカード・ライブラリー。ある瞬間の記録を、手に取れる形へ。" />
-    <meta property="og:title" content={`${title} | POST`} />
-    <meta property="og:description" content="Record of a moment. クリエイターの視点を届けるポストカードショップ。" />
+    <title>{title} | {site.meta.siteSuffix}</title>
+    <meta name="description" content={site.meta.description} />
+    <meta property="og:title" content={`${title} | ${site.meta.siteName}`} />
+    <meta property="og:description" content={site.meta.ogDescription} />
     <meta property="og:image" content="/images/ogp.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,13 +51,13 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
           <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
         </button>
         <nav class="header-left">
-          <a href="/#archive">Archive (Online Shop)</a>
-          <a href="/about">About</a>
+          <a href="/#archive">{site.header.navArchive}</a>
+          <a href="/about">{site.header.navAbout}</a>
         </nav>
         <div class="logo-area">
-          <span class="logo-tagline">Kanazawa — Record of a Moment</span>
-          <a href="/" class="logo-main">POST</a>
-          <span class="logo-tagline">Postcard Library by MiKS</span>
+          <span class="logo-tagline">{site.header.tagAbove}</span>
+          <a href="/" class="logo-main">{site.header.logo}</a>
+          <span class="logo-tagline">{site.header.tagBelow}</span>
         </div>
         <div class="header-right">
           <div class="header-icons">
@@ -79,47 +79,47 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
     <!-- Mobile nav -->
     <div class="mobile-nav" id="mobile-nav">
       <button class="mobile-nav-close" data-mobile-menu-close>✕</button>
-      <a href="/">Home</a>
-      <a href="/#archive">Archive (Online Shop)</a>
-      <a href="/about">About</a>
-      <a href="/cart">カート</a>
-      <a href={`mailto:${contactEmail}`}>Contact</a>
-      <a href="/legal/tokushoho">特定商取引法に基づく表記</a>
-      <a href="/legal/privacy">プライバシーポリシー</a>
+      <a href="/">{site.mobileNav.home}</a>
+      <a href="/#archive">{site.mobileNav.archive}</a>
+      <a href="/about">{site.mobileNav.about}</a>
+      <a href="/cart">{site.mobileNav.cart}</a>
+      <a href={site.links.companyContactUrl} target="_blank" rel="noopener">{site.mobileNav.contact}</a>
+      <a href="/legal/tokushoho">{site.mobileNav.tokushoho}</a>
+      <a href="/legal/privacy">{site.mobileNav.privacy}</a>
     </div>
 
     <!-- Search overlay -->
     <div class="search-overlay" id="search-overlay">
       <button class="search-close" data-search-close>✕</button>
-      <input type="text" class="search-input" placeholder="Search..." id="search-input" autocomplete="off" />
-      <div class="search-results" id="search-results"></div>
+      <input type="text" class="search-input" placeholder={site.search.placeholder} id="search-input" autocomplete="off" />
+      <div class="search-results" id="search-results" data-empty-msg={site.search.empty}></div>
     </div>
 
     <!-- Mini cart drawer -->
     <div class="mini-cart-overlay" id="mini-cart-overlay" data-mini-cart-close></div>
-    <div class="mini-cart" id="mini-cart">
+    <div class="mini-cart" id="mini-cart" data-empty-msg={site.miniCart.empty}>
       <div class="mini-cart-header">
-        <span>カート</span>
+        <span>{site.miniCart.heading}</span>
         <button class="mini-cart-close" data-mini-cart-close>✕</button>
       </div>
       <div class="mini-cart-items" id="mini-cart-items"></div>
       <div class="mini-cart-footer" id="mini-cart-footer" style="display:none;">
         <div class="mini-cart-total">
-          <span>合計</span>
+          <span>{site.miniCart.totalLabel}</span>
           <span id="mini-cart-total"></span>
         </div>
         <form action="/api/checkout" method="POST">
           <input type="hidden" name="cartData" id="mini-cart-data" />
-          <button type="submit" class="mini-cart-checkout">レジに進む</button>
+          <button type="submit" class="mini-cart-checkout">{site.miniCart.checkout}</button>
         </form>
-        <a href="/#archive" class="mini-cart-continue" data-mini-cart-close>買い物を続ける</a>
+        <a href="/#archive" class="mini-cart-continue" data-mini-cart-close>{site.miniCart.continue}</a>
       </div>
     </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">
       <span id="toast-msg"></span>
-      <span class="toast-action" data-mini-cart-open>カートを見る</span>
+      <span class="toast-action" data-mini-cart-open>{site.toast.viewCart}</span>
     </div>
 
     <main>
@@ -134,36 +134,35 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
       <div class="site-footer">
         <div class="footer-grid">
           <div class="footer-col">
-            <div class="footer-col-title">POST</div>
-            <p style="line-height: 1.8;">Kanazawa, Japan<br />by MiKS inc.</p>
+            <div class="footer-col-title">{site.footer.brandTitle}</div>
+            <p style="line-height: 1.8;" set:html={site.footer.brandLines.join('<br />')}></p>
           </div>
           <div class="footer-col">
-            <div class="footer-col-title">Menu</div>
-            <a href="/#archive">Archive (Online Shop)</a>
-            <a href="/about">About</a>
-            <a href={`mailto:${contactEmail}`}>Contact</a>
+            <div class="footer-col-title">{site.footer.menuTitle}</div>
+            <a href="/#archive">{site.footer.linkArchive}</a>
+            <a href="/about">{site.footer.linkAbout}</a>
+            <a href={site.links.companyContactUrl} target="_blank" rel="noopener">{site.footer.linkContact}</a>
           </div>
           <div class="footer-col">
-            <div class="footer-col-title">Connect</div>
-            <a href={instagramUrl} target="_blank" rel="noopener">Instagram</a>
-            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+            <div class="footer-col-title">{site.footer.connectTitle}</div>
+            <a href={instagramUrl} target="_blank" rel="noopener">{site.footer.instagramLabel}</a>
+            <a href={site.links.companyContactUrl} target="_blank" rel="noopener">miks-inc.com</a>
           </div>
         </div>
         <div class="footer-grid" style="margin-top: 32px;">
           <div class="footer-col">
-            <a href="/legal/tokushoho">特定商取引法に基づく表記</a>
-            <a href="/legal/privacy">プライバシーポリシー</a>
-            <a href="/legal/shipping">配送・返品ポリシー</a>
+            <a href="/legal/tokushoho">{site.footer.linkTokushoho}</a>
+            <a href="/legal/privacy">{site.footer.linkPrivacy}</a>
+            <a href="/legal/shipping">{site.footer.linkShipping}</a>
           </div>
         </div>
-        <div class="footer-bottom">© <span id="footer-year"></span> POST — Record of a moment. All rights reserved.</div>
+        <div class="footer-bottom">{site.footer.copyright.replace('{year}', String(new Date().getFullYear()))}</div>
       </div>
     </footer>
 
     <!-- Global JS -->
     <script>
-      // ===== Dynamic year =====
-      document.getElementById('footer-year').textContent = new Date().getFullYear();
+      // (footer year is rendered server-side from site.ja.json)
 
       // ===== Cart helpers =====
       const MAX_QTY = 10;
@@ -235,7 +234,8 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
         if (!itemsEl) return;
 
         if (cart.length === 0) {
-          itemsEl.innerHTML = '<div class="mini-cart-empty">カートは空です</div>';
+          const emptyMsg = document.getElementById('mini-cart')?.dataset.emptyMsg || '';
+          itemsEl.innerHTML = `<div class="mini-cart-empty">${emptyMsg}</div>`;
           if (footerEl) footerEl.style.display = 'none';
           return;
         }
@@ -319,6 +319,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
           const matches = window.__products.filter(p =>
             p.name.toLowerCase().includes(q) || p.creator.toLowerCase().includes(q)
           ).slice(0, 8);
+          const emptyMsg = searchResults.dataset.emptyMsg || '';
           searchResults.innerHTML = matches.map(p => `
             <a href="/product/${p.id}" class="search-result-item">
               <div class="search-result-img"><img src="${p.image}" alt="" /></div>
@@ -327,7 +328,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
                 <div class="search-result-price">${p.creator} — ¥${p.price.toLocaleString()}</div>
               </div>
             </a>
-          `).join('') || '<p style="color:var(--muted);font-size:13px;padding:16px 0;">該当する商品が見つかりません</p>';
+          `).join('') || `<p style="color:var(--muted);font-size:13px;padding:16px 0;">${emptyMsg}</p>`;
         });
       }
 

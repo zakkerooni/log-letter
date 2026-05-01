@@ -1,24 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import AboutBlock from '../components/AboutBlock.astro';
+import site from '../content/site.ja.json';
 ---
 
-<Layout title="About">
+<Layout title={site.header.navAbout}>
   <div class="breadcrumb">
     <a href="/">Home</a>
     <span>/</span>
-    About
+    {site.header.navAbout}
   </div>
 
   <section class="about-section" style="padding-top: 40px; padding-bottom: 60px;">
     <div style="margin-bottom: 48px;">
-      <span class="section-title-sm">About POST</span>
-      <h2 class="section-title" style="margin-bottom: 0;">The Record of a Moment</h2>
+      <span class="section-title-sm">{site.about.smallLabel}</span>
+      <h2 class="section-title" style="margin-bottom: 0;">{site.about.heading}</h2>
     </div>
     <div class="about-text">
-      <p>ポストカードは、ある瞬間の「記録」である。私たちはそう考えます。</p>
-      <p>金沢の静かな空気感や、クリエイターの視点が切り取った断片を、手に取れる形、届ける形へと。</p>
-      <p>MiKSは、クリエイターの創作活動を支援し、売上の一部は、次なる作品を生むための糧として作家へ還元されます。</p>
+      {site.about.paragraphs.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
@@ -38,7 +36,7 @@ import AboutBlock from '../components/AboutBlock.astro';
 
   <div style="text-align: center; padding-bottom: 80px;">
     <a href="/#archive" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px;">
-      Back to Archive
+      {site.about.backToArchive}
     </a>
   </div>
 </Layout>

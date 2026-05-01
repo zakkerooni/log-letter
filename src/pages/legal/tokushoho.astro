@@ -1,28 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-const contactEmail = import.meta.env.PUBLIC_CONTACT_EMAIL || 'info@miks-inc.com';
+import site from '../../content/site.ja.json';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('legal', 'tokushoho');
+const { Content } = await render(entry);
 ---
 
-<Layout title="特定商取引法に基づく表記">
+<Layout title={site.legal.tokushohoTitle}>
   <div class="breadcrumb">
-    <a href="/">Home</a><span>/</span>特定商取引法に基づく表記
+    <a href="/">Home</a><span>/</span>{site.legal.tokushohoTitle}
   </div>
   <div class="legal-page">
-    <h1>特定商取引法に基づく表記</h1>
-    <table>
-      <tr><th>販売業者</th><td>MiKS inc.</td></tr>
-      <tr><th>運営統括責任者</th><td>【責任者名を記入】</td></tr>
-      <tr><th>所在地</th><td>〒920-XXXX 石川県金沢市【住所を記入】</td></tr>
-      <tr><th>電話番号</th><td>【電話番号を記入】<br /><small>※お問い合わせはメールにてお願いいたします</small></td></tr>
-      <tr><th>メールアドレス</th><td>{contactEmail}</td></tr>
-      <tr><th>販売URL</th><td>https://【ドメインを記入】</td></tr>
-      <tr><th>販売価格</th><td>各商品ページに記載（税込）</td></tr>
-      <tr><th>商品代金以外の必要料金</th><td>送料（全国一律 ¥200 / ¥2,000以上で送料無料）</td></tr>
-      <tr><th>お支払い方法</th><td>クレジットカード（Visa, Mastercard, American Express, JCB）</td></tr>
-      <tr><th>お支払い時期</th><td>ご注文時に即時決済</td></tr>
-      <tr><th>商品の引渡し時期</th><td>ご注文から3営業日以内に発送</td></tr>
-      <tr><th>返品・交換</th><td>商品の性質上、お客様都合による返品・交換はお受けしておりません。<br />不良品の場合は、商品到着後7日以内にご連絡ください。</td></tr>
-      <tr><th>返品送料</th><td>不良品の場合は当社負担</td></tr>
-    </table>
+    <h1>{site.legal.tokushohoTitle}</h1>
+    <Content />
   </div>
 </Layout>

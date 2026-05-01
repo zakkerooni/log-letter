@@ -1,20 +1,10 @@
 @import "tailwindcss";
+@import "./_tokens.css";
 
-/* ========== POST Shop — Global Styles ========== */
+/* ========== POST Shop — Global Styles ==========
+   色・フォント等のデザイントークンは src/styles/tokens.json で一元管理。
+   _tokens.css は自動生成 (npm run dev / build 時) — 直接編集しないでください。 */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-:root {
-  --bg: #ffffff;
-  --fg: #1a1a1a;
-  --muted: #888;
-  --border: #e0e0e0;
-  --card-bg: #f6f5f3;
-  --accent: #ff6400;
-  --font-display: Georgia, serif;
-  --font-body: Arial, sans-serif;
-  --font-jp: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-  --font-jp-serif: "Yu Mincho", "游明朝", YuMincho, "Hiragino Mincho ProN", serif;
-}
 
 html { scroll-behavior: smooth; }
 
@@ -776,6 +766,11 @@ img { display: block; max-width: 100%; }
   padding: 10px 14px; text-align: left;
 }
 .legal-page th {
+  background: var(--card-bg); font-weight: 400;
+  width: 30%;
+}
+/* Markdown tables: shade the first body column to match the original 表記 layout */
+.legal-page tbody td:first-child {
   background: var(--card-bg); font-weight: 400;
   width: 30%;
 }
