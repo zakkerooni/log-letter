@@ -4,14 +4,15 @@
 
 import { execSync } from "node:child_process";
 
-// Client ID は tina/config.ts に直接記述済み。Token のみ env var が必須。
-if (process.env.TINA_TOKEN) {
-  console.log("→ TINA_TOKEN detected. Building admin UI...");
-  execSync("npx tinacms build", { stdio: "inherit" });
-} else {
-  console.log("→ TINA_TOKEN not set. Skipping admin build.");
-  console.log("  Set TINA_TOKEN in Cloudflare Build → Variables and secrets to enable /admin");
-}
+// Client ID は tina/config.ts に直接記述済み。
+// --skip-cloud-checks で TinaCloud との schema validation をスキップし、
+// TINA_TOKEN なしで admin UI をビルドできる (token は dummy で OK)。
+// 認証は admin 画面から GitHub OAuth で行われるので問題ない。
+console.log("→ Building TinaCMS admin UI (skip-cloud-checks)...");
+execSync("npx tinacms build --skip-cloud-checks", {
+  stdio: "inherit",
+  env: { ...process.env, TINA_TOKEN: process.env.TINA_TOKEN || "dummy" },
+});
 
 console.log("→ Building Astro site...");
 execSync("npx astro build", { stdio: "inherit" });
