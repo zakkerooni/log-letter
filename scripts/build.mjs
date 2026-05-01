@@ -4,14 +4,13 @@
 
 import { execSync } from "node:child_process";
 
-const hasTina = process.env.PUBLIC_TINA_CLIENT_ID && process.env.TINA_TOKEN;
-
-if (hasTina) {
-  console.log("→ TinaCMS env vars detected. Building admin UI...");
+// Client ID は tina/config.ts に直接記述済み。Token のみ env var が必須。
+if (process.env.TINA_TOKEN) {
+  console.log("→ TINA_TOKEN detected. Building admin UI...");
   execSync("npx tinacms build", { stdio: "inherit" });
 } else {
-  console.log("→ TinaCMS env vars not set. Skipping admin build.");
-  console.log("  (set PUBLIC_TINA_CLIENT_ID and TINA_TOKEN to enable /admin)");
+  console.log("→ TINA_TOKEN not set. Skipping admin build.");
+  console.log("  Set TINA_TOKEN in Cloudflare Build → Variables and secrets to enable /admin");
 }
 
 console.log("→ Building Astro site...");
