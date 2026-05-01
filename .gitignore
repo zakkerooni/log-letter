@@ -25,3 +25,9 @@ npm-debug.log*
 # Cloudflare
 .wrangler/
 package-lock.json
+
+# TinaCMS — 自動生成ファイル
+tina/__generated__/
+tina/tina-lock.json
+public/admin/
+
