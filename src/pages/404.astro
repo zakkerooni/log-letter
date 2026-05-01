@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import site from '../copy/site.ja.json';
 ---
 
-<Layout title="404">
+<Layout title={site.notFound.title}>
   <div class="not-found">
-    <h1>404</h1>
-    <p>お探しのページが見つかりませんでした</p>
+    <h1>{site.notFound.title}</h1>
+    <p>{site.notFound.message}</p>
     <a href="/" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px;">
-      Back to Home
+      {site.notFound.backToHome}
     </a>
   </div>
 </Layout>

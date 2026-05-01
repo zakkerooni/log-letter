@@ -1,14 +1,14 @@
 ---
+import site from '../copy/site.ja.json';
 const { compact = false } = Astro.props;
 ---
 
 <div class={`about-section ${compact ? 'compact' : ''}`}>
   <div style="margin-bottom: 32px;">
-    <span class="section-title-sm">Concept</span>
-    <h2 class="section-title" style="margin-bottom: 0;">The Record of a Moment</h2>
+    <span class="section-title-sm">{site.concept.smallLabel}</span>
+    <h2 class="section-title" style="margin-bottom: 0;">{site.concept.heading}</h2>
   </div>
   <div class="about-text">
-    <p>ポストカードは、ある瞬間の「記録」である。私たちはそう考えます。</p>
-    <p>金沢の静かな空気感や、クリエイターの視点が切り取った断片を、手に取れる形、届ける形へと。</p>
+    {site.concept.paragraphs.map((p) => <p>{p}</p>)}
   </div>
 </div>

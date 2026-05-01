@@ -1,20 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import site from '../copy/site.ja.json';
 ---
 
 <Layout title="Thank you">
   <section style="min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 80px 40px;">
     <div style="max-width: 640px;">
-      <span class="section-title-sm">Order Completed</span>
+      <span class="section-title-sm">{site.success.smallLabel}</span>
       <div class="about-text" style="margin-top: 32px;">
-        <p>ご購入ありがとうございました。<br />ポストカードの到着まで、今しばらくお待ちください。</p>
+        {site.success.paragraphs.map((p) => <p set:html={p}></p>)}
         <p style="font-size: 11px; color: var(--muted); letter-spacing: 0.2em; font-family: var(--font-body);">
-          ご登録いただいたメールアドレスへ、確認メールをお送りしました。
+          {site.success.subNote}
         </p>
       </div>
       <div style="margin-top: 48px;">
         <a href="/" class="product-card-btn" style="width: auto; display: inline-block; padding: 14px 60px;">
-          Back to Library
+          {site.success.backToHome}
         </a>
       </div>
     </div>

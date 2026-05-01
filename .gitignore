@@ -1,0 +1,27 @@
+# 依存関係
+node_modules/
+
+# ビルド成果物
+dist/
+.astro/
+
+# 環境変数（絶対にコミットしない）
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# macOS
+.DS_Store
+
+# エディタ
+.vscode/
+.idea/
+
+# ログ
+*.log
+npm-debug.log*
+
+# Cloudflare
+.wrangler/
+package-lock.json
