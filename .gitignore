@@ -26,8 +26,7 @@ npm-debug.log*
 .wrangler/
 package-lock.json
 
-# TinaCMS — 自動生成ファイル
+# TinaCMS — 自動生成ファイル (tina-lock.json は commit する)
 tina/__generated__/
-tina/tina-lock.json
 public/admin/
 

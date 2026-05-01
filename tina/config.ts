@@ -9,8 +9,9 @@ const branch =
 export default defineConfig({
   branch,
 
-  // TinaCMS Cloud で発行される ID とトークン
-  clientId: process.env.PUBLIC_TINA_CLIENT_ID!,
+  // Client ID は admin UI に埋め込まれて公開される値なのでハードコード OK。
+  // Token は TinaCloud の build 時認証用、Cloudflare Build env var で設定する。
+  clientId: "0aa9a3ca-90a5-47f3-9c9d-0228bde46a52",
   token: process.env.TINA_TOKEN!,
 
   build: {
