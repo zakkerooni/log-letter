@@ -5,11 +5,11 @@
     "companyContactUrl": "https://miks-inc.com/"
   },
   "meta": {
-    "siteName": "POST",
-    "siteSuffix": "POST — Postcard Library",
+    "siteName": "Log Letter",
+    "siteSuffix": "Log Letter｜Postcard Library",
     "description": "金沢、ポストカード・ライブラリー。ある瞬間の記録を、手に取れる形へ。",
     "ogDescription": "Record of a moment. クリエイターの視点を届けるポストカードショップ。",
-    "storeJsonLdName": "POST — Postcard Library",
+    "storeJsonLdName": "Log Letter｜Postcard Library",
     "storeJsonLdDescription": "金沢のポストカード・ライブラリー。クリエイターの視点を届けるポストカードショップ。",
     "addressLocality": "Kanazawa",
     "addressCountry": "JP"
