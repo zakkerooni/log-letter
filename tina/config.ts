@@ -31,7 +31,7 @@ export default defineConfig({
         name: "site",
         label: "サイト全体の文言",
         path: "src/copy",
-        match: { include: "site.ja" },
+        match: { include: "site" },
         format: "json",
         ui: {
           allowedActions: { create: false, delete: false },
