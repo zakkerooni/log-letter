@@ -35,7 +35,6 @@ export default defineConfig({
         format: "json",
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => "/",
         },
         fields: [
           {
@@ -254,7 +253,6 @@ export default defineConfig({
         format: "md",
         ui: {
           allowedActions: { create: false, delete: false },
-          router: ({ document }) => `/legal/${document._sys.filename}`,
         },
         fields: [
           {
@@ -274,7 +272,6 @@ export default defineConfig({
         format: "json",
         ui: {
           allowedActions: { create: false, delete: false },
-          router: () => "/",
         },
         fields: [
           {
