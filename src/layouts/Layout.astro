@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import site from '../copy/site.ja.json';
+import site from '../copy/site.json';
 
 const { title } = Astro.props;
 const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://instagram.com';
@@ -162,7 +162,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
 
     <!-- Global JS -->
     <script>
-      // (footer year is rendered server-side from site.ja.json)
+      // (footer year is rendered server-side from site.json)
 
       // ===== Cart helpers =====
       const MAX_QTY = 10;
