@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import site from '../../copy/site.json';
 import { Content } from '../../copy/legal/privacy.md';
+
+const site = Astro.locals.site;
 ---
 
 <Layout title={site.legal.privacyTitle}>

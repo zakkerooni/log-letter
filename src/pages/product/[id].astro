@@ -4,8 +4,8 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import Stripe from 'stripe';
-import site from '../../copy/site.json';
 
+const site = Astro.locals.site;
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 const { id } = Astro.params;
 
