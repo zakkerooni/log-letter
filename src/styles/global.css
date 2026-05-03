@@ -328,6 +328,7 @@ img { display: block; max-width: 100%; }
   line-height: 2.4; letter-spacing: 0.08em;
   color: #555;
 }
+.about-text p { white-space: pre-line; }
 .about-text p + p { margin-top: 28px; }
 
 /* ========== Product Detail ========== */

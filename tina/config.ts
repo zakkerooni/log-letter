@@ -111,7 +111,7 @@ export default defineConfig({
             fields: [
               { name: "smallLabel", label: "小見出し", type: "string" },
               { name: "heading", label: "見出し", type: "string" },
-              { name: "paragraphs", label: "段落", type: "string", list: true, ui: { component: "textarea" } },
+              { name: "body", label: "本文 (空行で段落区切り)", type: "string", ui: { component: "textarea" } },
             ],
           },
           {
@@ -121,7 +121,7 @@ export default defineConfig({
             fields: [
               { name: "smallLabel", label: "小見出し", type: "string" },
               { name: "heading", label: "見出し", type: "string" },
-              { name: "paragraphs", label: "段落", type: "string", list: true, ui: { component: "textarea" } },
+              { name: "body", label: "本文 (空行で段落区切り)", type: "string", ui: { component: "textarea" } },
               { name: "backToArchive", label: "戻るボタン文言", type: "string" },
             ],
           },
@@ -199,7 +199,7 @@ export default defineConfig({
             type: "object",
             fields: [
               { name: "smallLabel", label: "小見出し", type: "string" },
-              { name: "paragraphs", label: "本文 (HTML 可)", type: "string", list: true, ui: { component: "textarea" } },
+              { name: "body", label: "本文 (空行で段落区切り、HTML 可)", type: "string", ui: { component: "textarea" } },
               { name: "subNote", label: "補足", type: "string" },
               { name: "backToHome", label: "戻るボタン", type: "string" },
             ],
