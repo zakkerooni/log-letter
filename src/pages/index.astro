@@ -14,11 +14,15 @@ const products = await stripe.products.list({ active: true, expand: ['data.defau
 const allProducts = await stripe.products.list({ expand: ['data.default_price'] });
 const soldOutProducts = allProducts.data.filter(p => !p.active);
 
-// Picks: first 6 active products
-const picks = products.data.slice(0, 6);
+// Picks: featured を先頭に、残りは元の順序で 6 件まで
+const isFeatured = (p) => String(p.metadata?.featured || '').toLowerCase() === 'true';
+const featured = products.data.filter(isFeatured);
+const rest = products.data.filter((p) => !isFeatured(p));
+const picks = [...featured, ...rest].slice(0, 6);
 
-// Collect unique creators for filter
+// Collect unique creators / series for filter
 const creators = [...new Set(products.data.map(p => p.metadata?.creator || 'POST'))];
+const seriesList = [...new Set(products.data.map(p => p.metadata?.series).filter(Boolean))];
 
 // Build product data for search
 const searchData = products.data.map(p => ({
@@ -96,12 +100,22 @@ const searchData = products.data.map(p => ({
       <h2 class="section-title" style="margin-bottom: 0;">{site.home.archiveHeading}</h2>
     </div>
 
-    <!-- Filter -->
+    <!-- Filter (creator) -->
     {creators.length > 1 && (
-      <div class="filter-bar" data-filter-bar>
+      <div class="filter-bar" data-filter-bar="creator">
         <button class="filter-btn active" data-filter="all">{site.home.filterAll}</button>
         {creators.map(c => (
           <button class="filter-btn" data-filter={c}>{c}</button>
+        ))}
+      </div>
+    )}
+
+    <!-- Filter (series) -->
+    {seriesList.length > 1 && (
+      <div class="filter-bar" data-filter-bar="series">
+        <button class="filter-btn active" data-series-filter="all">{site.home.filterAll}</button>
+        {seriesList.map(s => (
+          <button class="filter-btn" data-series-filter={s}>{s}</button>
         ))}
       </div>
     )}
@@ -143,21 +157,32 @@ const searchData = products.data.map(p => ({
     track?.scrollBy({ left: 260, behavior: 'smooth' });
   });
 
-  // Filter
+  // Filter — creator と series の AND で絞り込み
+  let activeCreator = 'all';
+  let activeSeries = 'all';
+  function applyFilters() {
+    document.querySelectorAll('#product-grid .product-card').forEach(card => {
+      const c = card.dataset.creator || '';
+      const s = card.dataset.series || '';
+      const matchCreator = activeCreator === 'all' || c === activeCreator;
+      const matchSeries = activeSeries === 'all' || s === activeSeries;
+      card.style.display = matchCreator && matchSeries ? '' : 'none';
+    });
+  }
   document.querySelectorAll('[data-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
+      activeCreator = btn.dataset.filter;
       document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      document.querySelectorAll('#product-grid .product-card').forEach(card => {
-        if (filter === 'all') {
-          card.style.display = '';
-        } else {
-          const creator = card.querySelector('.product-card-creator')?.textContent?.trim();
-          card.style.display = creator === filter ? '' : 'none';
-        }
-      });
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('[data-series-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeSeries = btn.dataset.seriesFilter;
+      document.querySelectorAll('[data-series-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
     });
   });
 </script>

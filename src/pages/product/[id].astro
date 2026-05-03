@@ -37,6 +37,15 @@ const images = combined.length
   ? combined
   : ['https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST'];
 
+// その他のメタデータ
+const tag = product.metadata?.tag || '';
+const series = product.metadata?.series || '';
+const paperType = product.metadata?.paperType || '';
+const sizeOverride = product.metadata?.size || '';
+const description2 = product.metadata?.description2 || '';
+const releaseDate = product.metadata?.releaseDate || '';
+const soldOut = String(product.metadata?.soldOut || '').toLowerCase() === 'true';
+
 // Related products
 const allProducts = await stripe.products.list({ active: true, expand: ['data.default_price'] });
 const related = allProducts.data.filter(p => p.id !== product.id).slice(0, 4);
@@ -106,9 +115,14 @@ const searchData = allProducts.data.map(p => ({
     </div>
 
     <div class="detail-info">
+      <div class="detail-tags">
+        {tag && <span class="detail-tag">{tag}</span>}
+        {series && <span class="detail-series">{series}</span>}
+      </div>
       <p class="detail-creator">{creator}</p>
       <h1 class="detail-name">{product.name}</h1>
       <p class="detail-price">¥{amount.toLocaleString()} <span style="font-size: 11px; color: var(--muted); margin-left: 8px;">{site.product.taxNote}</span></p>
+      {releaseDate && <p class="detail-release">{releaseDate}</p>}
 
       <!-- 信頼バッジ -->
       <div class="trust-row">
@@ -127,17 +141,27 @@ const searchData = allProducts.data.map(p => ({
       </div>
 
       <!-- 在庫表示 -->
-      <p class="stock-status">
-        <span class="stock-dot"></span>
-        <strong>{site.product.stockLabel}</strong>
-        <span style="color: var(--muted); margin-left: 8px;">{site.product.stockNote}</span>
-      </p>
+      {soldOut ? (
+        <p class="stock-status sold-out">
+          <span class="stock-dot" style="background: #c33;"></span>
+          <strong>{site.product.soldOut}</strong>
+        </p>
+      ) : (
+        <p class="stock-status">
+          <span class="stock-dot"></span>
+          <strong>{site.product.stockLabel}</strong>
+          <span style="color: var(--muted); margin-left: 8px;">{site.product.stockNote}</span>
+        </p>
+      )}
 
       <!-- 配送目安 -->
       <p class="delivery-info" set:html={site.product.deliveryNote}></p>
 
       {product.description && (
         <p class="detail-desc">{product.description}</p>
+      )}
+      {description2 && (
+        <p class="detail-desc detail-desc-secondary">{description2}</p>
       )}
 
       <!-- 数量 -->
@@ -151,35 +175,44 @@ const searchData = allProducts.data.map(p => ({
       </div>
 
       <!-- 購入ボタン -->
-      <button
-        type="button"
-        class="detail-buy-btn buy-cart"
-        data-add-cart
-        data-product-id={product.id}
-        data-price-id={price?.id}
-        data-name={product.name}
-        data-creator={creator}
-        data-image={images[0]}
-        data-price={amount}
-      >
-        {site.product.addToCart}
-      </button>
-      <button
-        type="button"
-        class="detail-buy-btn buy-now"
-        data-buy-now
-        data-product-id={product.id}
-        data-price-id={price?.id}
-        data-name={product.name}
-        data-creator={creator}
-        data-image={images[0]}
-        data-price={amount}
-      >
-        {site.product.buyNow}
-      </button>
+      {soldOut ? (
+        <button type="button" class="detail-buy-btn buy-cart" disabled>
+          {site.product.soldOut}
+        </button>
+      ) : (
+        <Fragment>
+          <button
+            type="button"
+            class="detail-buy-btn buy-cart"
+            data-add-cart
+            data-product-id={product.id}
+            data-price-id={price?.id}
+            data-name={product.name}
+            data-creator={creator}
+            data-image={images[0]}
+            data-price={amount}
+          >
+            {site.product.addToCart}
+          </button>
+          <button
+            type="button"
+            class="detail-buy-btn buy-now"
+            data-buy-now
+            data-product-id={product.id}
+            data-price-id={price?.id}
+            data-name={product.name}
+            data-creator={creator}
+            data-image={images[0]}
+            data-price={amount}
+          >
+            {site.product.buyNow}
+          </button>
+        </Fragment>
+      )}
 
       <div class="detail-meta">
-        <p>{site.product.metaSize}</p>
+        <p>{sizeOverride ? `サイズ: ${sizeOverride}` : site.product.metaSize}</p>
+        {paperType && <p>用紙: {paperType}</p>}
         <p>{site.product.metaPrint}</p>
         <p>{site.product.metaShip}</p>
         <p>{site.product.metaFee}</p>
