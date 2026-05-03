@@ -5,28 +5,37 @@ const price = product.default_price;
 const amount = price?.unit_amount ?? 0;
 const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST';
 const creator = product.metadata?.creator || 'POST';
+const tag = product.metadata?.tag || '';
+const series = product.metadata?.series || '';
+const soldOut = String(product.metadata?.soldOut || '').toLowerCase() === 'true';
 ---
 
-<article class="product-card" data-creator={creator}>
+<article class="product-card" data-creator={creator} data-series={series}>
   <a href={`/product/${product.id}`}>
     <div class="product-card-img">
       <img src={image} alt={product.name} loading="lazy" />
+      {tag && <span class="product-card-tag">{tag}</span>}
+      {soldOut && <span class="sold-out-label">{site.product.soldOut}</span>}
     </div>
     <p class="product-card-creator">{creator}</p>
     <p class="product-card-name">{product.name}</p>
-    <p class="product-card-price">¥{amount.toLocaleString()}</p>
+    <p class="product-card-price" style={soldOut ? 'text-decoration: line-through; color: var(--muted);' : ''}>¥{amount.toLocaleString()}</p>
   </a>
-  <button
-    type="button"
-    class="product-card-btn"
-    data-add-cart
-    data-product-id={product.id}
-    data-price-id={price?.id}
-    data-name={product.name}
-    data-creator={creator}
-    data-image={image}
-    data-price={amount}
-  >
-    {site.product.addToCart}
-  </button>
+  {soldOut ? (
+    <button type="button" class="product-card-btn" disabled>{site.product.soldOut}</button>
+  ) : (
+    <button
+      type="button"
+      class="product-card-btn"
+      data-add-cart
+      data-product-id={product.id}
+      data-price-id={price?.id}
+      data-name={product.name}
+      data-creator={creator}
+      data-image={image}
+      data-price={amount}
+    >
+      {site.product.addToCart}
+    </button>
+  )}
 </article>

@@ -211,6 +211,49 @@ img { display: block; max-width: 100%; }
   z-index: 1;
 }
 
+/* Tag badge (NEW / 限定 etc.) on the card */
+.product-card-tag {
+  position: absolute; top: 12px; right: 12px;
+  background: var(--accent); color: #fff;
+  font-size: 9px; letter-spacing: 1px;
+  font-family: var(--font-body); font-weight: 500;
+  padding: 4px 10px;
+  z-index: 1;
+}
+.product-card-btn:disabled {
+  background: #ddd; color: #888; cursor: not-allowed;
+}
+
+/* Detail page tag/series row */
+.detail-tags {
+  display: flex; gap: 8px; margin-bottom: 12px;
+  font-family: var(--font-body);
+}
+.detail-tag {
+  background: var(--accent); color: #fff;
+  font-size: 10px; letter-spacing: 1px;
+  padding: 3px 10px;
+}
+.detail-series {
+  background: var(--card-bg); color: var(--fg);
+  font-size: 10px; letter-spacing: 1px;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+}
+.detail-release {
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 0.15em;
+  font-family: var(--font-body);
+  margin-top: 4px;
+}
+.detail-desc-secondary {
+  margin-top: 12px; color: #777;
+}
+.stock-status.sold-out strong { color: #c33; }
+.detail-buy-btn:disabled {
+  background: #ddd; color: #888; cursor: not-allowed;
+}
+
 /* Quick view overlay on hover */
 .product-card-quick {
   position: absolute;
