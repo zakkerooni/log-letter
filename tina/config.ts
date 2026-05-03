@@ -106,7 +106,7 @@ export default defineConfig({
             label: "🏠 トップページ",
             type: "object",
             fields: [
-              { name: "heroImage", label: "ヒーロー背景画像", type: "image" },
+              { name: "heroImage", label: "ヒーロー背景画像 (空欄でヒーロー非表示)", type: "image" },
               { name: "heroHeight", label: "ヒーロー高さ (px、省略時は 75vh)", type: "number" },
               { name: "heroTitle", label: "ヒーロータイトル", type: "string" },
               { name: "heroSub", label: "ヒーローサブ", type: "string" },

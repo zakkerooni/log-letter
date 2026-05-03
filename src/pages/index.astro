@@ -51,14 +51,13 @@ const searchData = products.data.map(p => ({
     "address": { "@type": "PostalAddress", "addressLocality": site.meta.addressLocality, "addressCountry": site.meta.addressCountry }
   })} />
 
-  <!-- Hero -->
-  {(() => {
-    const heroImage = site.home.heroImage || '/images/hero.jpg';
+  <!-- Hero — site.home.heroImage を空にすると非表示 (コンセプトからスタート) -->
+  {site.home.heroImage && (() => {
     const heroHeight = Number(site.home.heroHeight) > 0 ? `${site.home.heroHeight}px` : '75vh';
     return (
       <section class="hero" style={`height: ${heroHeight};`}>
         <img
-          src={heroImage}
+          src={site.home.heroImage}
           alt={site.meta.siteSuffix}
           class="hero-img"
           onerror="this.style.display='none'"

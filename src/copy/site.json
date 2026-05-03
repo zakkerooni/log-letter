@@ -40,7 +40,8 @@
     "picksHeading": "ピックアップ",
     "archiveRecordsSuffix": "Records",
     "archiveHeading": "ライブラリー",
-    "filterAll": "All"
+    "filterAll": "All",
+    "heroImage": ""
   },
   "concept": {
     "smallLabel": "About us",
