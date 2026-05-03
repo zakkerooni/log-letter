@@ -141,7 +141,17 @@ const logoImage = site?.header?.logoImage || '';
         <div class="footer-grid">
           <div class="footer-col">
             <div class="footer-col-title">{site.footer.brandTitle}</div>
-            <p style="line-height: 1.8;" set:html={site.footer.brandLines.join('<br />')}></p>
+            <p
+              style="line-height: 1.8;"
+              set:html={site.footer.brandLines
+                .map((line) =>
+                  line.replace(
+                    /MiKS inc\./g,
+                    `<a href="${site.links.companyHomeUrl || 'https://www.miks-inc.com/'}" target="_blank" rel="noopener">MiKS inc.</a>`,
+                  ),
+                )
+                .join('<br />')}
+            />
           </div>
           <div class="footer-col">
             <div class="footer-col-title">{site.footer.menuTitle}</div>
@@ -152,7 +162,7 @@ const logoImage = site?.header?.logoImage || '';
           <div class="footer-col">
             <div class="footer-col-title">{site.footer.connectTitle}</div>
             <a href={instagramUrl} target="_blank" rel="noopener">{site.footer.instagramLabel}</a>
-            <a href={site.links.companyContactUrl} target="_blank" rel="noopener">miks-inc.com</a>
+            <a href={site.links.companyContactUrl} target="_blank" rel="noopener">{site.footer.linkContact}</a>
           </div>
         </div>
         <div class="footer-grid" style="margin-top: 32px;">

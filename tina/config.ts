@@ -48,6 +48,11 @@ export default defineConfig({
                 type: "string",
               },
               {
+                name: "companyHomeUrl",
+                label: "ブランド表記の MiKS inc. リンク先 (会社トップページ)",
+                type: "string",
+              },
+              {
                 name: "instagramUrl",
                 label: "Instagram URL",
                 type: "string",
