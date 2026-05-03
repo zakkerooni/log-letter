@@ -123,5 +123,9 @@
     "tokushohoTitle": "特定商取引法に基づく表記",
     "privacyTitle": "プライバシーポリシー",
     "shippingTitle": "配送・返品ポリシー"
+  },
+  "shipping": {
+    "fee": 400,
+    "freeThreshold": 3000
   }
 }
