@@ -956,7 +956,9 @@ img { display: block; max-width: 100%; }
   .site-footer { padding: 40px 20px 32px; }
 
   /* About */
-  .about-section { padding: 60px 20px; }
+  .about-section { padding: 60px 20px; text-align: left; }
+  .about-section .section-title-sm,
+  .about-section .section-title { text-align: left; }
   .about-text { font-size: 14px; text-align: justify; text-justify: inter-character; }
   .about-text p { text-align: justify; text-justify: inter-character; }
 
