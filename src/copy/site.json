@@ -37,10 +37,10 @@
   "home": {
     "heroTitle": "Postcard Library",
     "heroSub": "Kanazawa — Record of a Moment",
-    "picksLabelSm": "Latest",
-    "picksHeading": "Picks",
+    "picksLabelSm": "Pickup / Latest",
+    "picksHeading": "ピックアップ",
     "archiveRecordsSuffix": "Records",
-    "archiveHeading": "Library Archive",
+    "archiveHeading": "ライブラリー",
     "filterAll": "All"
   },
   "concept": {
