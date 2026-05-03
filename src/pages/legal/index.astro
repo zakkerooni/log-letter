@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Content as Tokushoho } from '../../copy/legal/tokushoho.md';
+import { Content as Privacy } from '../../copy/legal/privacy.md';
+import { Content as Shipping } from '../../copy/legal/shipping.md';
+
+const site = Astro.locals.site;
+const pageTitle = site.legal?.legalPageTitle || 'ポリシー';
+---
+
+<Layout title={pageTitle}>
+  <div class="breadcrumb">
+    <a href="/">Home</a><span>/</span>{pageTitle}
+  </div>
+
+  <div class="legal-page">
+    <h1>{pageTitle}</h1>
+
+    <nav class="legal-toc" aria-label="目次">
+      <a href="#tokushoho">{site.legal.tokushohoTitle}</a>
+      <a href="#shipping">{site.legal.shippingTitle}</a>
+      <a href="#privacy">{site.legal.privacyTitle}</a>
+    </nav>
+
+    <section id="tokushoho" class="legal-section">
+      <h2>{site.legal.tokushohoTitle}</h2>
+      <Tokushoho />
+    </section>
+
+    <section id="shipping" class="legal-section">
+      <h2>{site.legal.shippingTitle}</h2>
+      <Shipping />
+    </section>
+
+    <section id="privacy" class="legal-section">
+      <h2>{site.legal.privacyTitle}</h2>
+      <Privacy />
+    </section>
+  </div>
+</Layout>
