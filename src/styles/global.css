@@ -173,7 +173,7 @@ img { display: block; max-width: 100%; }
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px 28px;
+  gap: 32px 16px;
 }
 .product-card {
   text-align: left; cursor: pointer;
@@ -324,7 +324,7 @@ img { display: block; max-width: 100%; }
   font-family: var(--font-body);
 }
 .carousel-track {
-  display: flex; gap: 24px; overflow-x: auto;
+  display: flex; gap: 16px; overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -938,8 +938,8 @@ img { display: block; max-width: 100%; }
   .hero-sub { font-size: 9px; letter-spacing: 0.3em; }
 
   /* Grid */
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
-  .products-section { padding: 40px 20px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 10px; }
+  .products-section { padding: 40px 16px; }
 
   /* Detail */
   .detail-page {
@@ -979,11 +979,11 @@ img { display: block; max-width: 100%; }
 }
 
 @media (max-width: 480px) {
-  .product-grid { grid-template-columns: 1fr; }
+  /* product-grid は 2 カラム維持 (768px の指定が継続) */
   .hero { height: 40vh; }
   .hero-title { font-size: 22px; }
   .section-title { font-size: 20px; }
-  .carousel-item, .carousel-track .product-card { flex: 0 0 160px; }
+  .carousel-item, .carousel-track .product-card { flex: 0 0 150px; }
 
   /* Related cards: horizontal scroll on mobile */
   .related-section .related-grid {
