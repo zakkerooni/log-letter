@@ -769,14 +769,17 @@ img { display: block; max-width: 100%; }
   font-size: 28px; letter-spacing: 2px;
   margin-bottom: 40px; text-align: center;
 }
+/* マークダウン内の中見出し (## ...) — 控えめなサイドキャップ風 */
 .legal-page h2 {
-  font-size: 14px; font-weight: 500;
-  letter-spacing: 1px; margin: 32px 0 12px;
   font-family: var(--font-body);
+  font-size: 14px; font-weight: 500;
+  letter-spacing: 0.12em; color: var(--fg);
+  margin: 36px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
 }
 .legal-toc {
   display: flex; flex-direction: column; gap: 8px;
-  padding: 20px 24px; margin: 0 0 40px;
+  padding: 20px 24px; margin: 0 0 48px;
   background: var(--card-bg); border: 1px solid var(--border);
   font-family: var(--font-body);
 }
@@ -787,21 +790,26 @@ img { display: block; max-width: 100%; }
 .legal-toc a:hover { color: var(--accent); }
 .legal-section {
   scroll-margin-top: 80px;
-  padding-top: 48px; margin-top: 48px;
+  padding-top: 56px; margin-top: 56px;
   border-top: 1px solid var(--border);
 }
 .legal-section:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
-.legal-section > h2 {
+/* セクションタイトル (大: 特商法 / 配送・返品 / プライバシー) */
+.legal-section > h2.section-heading {
   font-family: var(--font-display);
-  font-size: 22px; letter-spacing: 1.5px;
-  margin: 0 0 24px;
+  font-size: 22px; letter-spacing: 1.5px; font-weight: 400;
+  margin: 0 0 28px;
+  border: none; padding: 0;
 }
 .legal-page p, .legal-page li {
   font-family: var(--font-jp);
-  font-size: 13px; line-height: 2;
+  font-size: 13px; line-height: 1.95;
   color: #555; letter-spacing: 0.04em;
+  margin: 0 0 14px;
 }
-.legal-page ul { padding-left: 20px; }
+.legal-page p:last-child, .legal-page li:last-child { margin-bottom: 0; }
+.legal-page ul { padding-left: 20px; margin: 0 0 18px; }
+.legal-page ul li { margin-bottom: 6px; }
 .legal-page table {
   width: 100%; border-collapse: collapse; margin: 16px 0;
   font-family: var(--font-jp); font-size: 13px;
