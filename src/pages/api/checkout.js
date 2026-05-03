@@ -14,23 +14,20 @@ export const POST = async ({ request }) => {
   try {
     let line_items = [];
 
-    // 数量はチェックアウト画面で 0〜MAX_QTY の範囲で変更可能 (0 にすると行が消える)
-    const MAX_QTY = 10;
-    const adjustable_quantity = { enabled: true, minimum: 0, maximum: MAX_QTY };
-
-    // Cart checkout (multiple items)
+    // 数量変更はカート / ミニカート側だけで行う。チェックアウト画面で
+    // 数量を変えると送料の無料判定 (¥2,000 以上) がセッション作成時の値に
+    // 固定されたままになり、閾値を下回っても送料を請求できなくなるため。
     const cartData = data.get('cartData');
     if (cartData) {
       const items = JSON.parse(cartData);
       line_items = items.map(item => ({
         price: item.priceId,
         quantity: item.qty,
-        adjustable_quantity,
       }));
     } else {
       // Single item checkout (fallback)
       const priceId = data.get('priceId');
-      line_items = [{ price: priceId, quantity: 1, adjustable_quantity }];
+      line_items = [{ price: priceId, quantity: 1 }];
     }
 
     // Stripe から実価格を取得して小計を計算 (クライアント値は信用しない)
