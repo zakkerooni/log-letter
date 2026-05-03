@@ -23,6 +23,9 @@ const paragraphs = site.about.body
     <div class="about-text">
       {paragraphs.map((p) => <p>{p}</p>)}
     </div>
+    {site.about.signature && (
+      <p class="about-signature">{site.about.signature}</p>
+    )}
   </section>
 
   <!-- Concept images -->

@@ -340,6 +340,12 @@ img { display: block; max-width: 100%; }
 }
 .about-text p { white-space: pre-line; }
 .about-text p + p { margin-top: 28px; }
+.about-signature {
+  margin-top: 36px; text-align: center;
+  font-family: var(--font-body);
+  font-size: 11px; letter-spacing: 0.25em;
+  color: var(--muted); text-transform: none;
+}
 
 /* ========== Product Detail ========== */
 .detail-page {

@@ -15,4 +15,7 @@ const paragraphs = site.concept.body
   <div class="about-text">
     {paragraphs.map((p) => <p>{p}</p>)}
   </div>
+  {site.concept.signature && (
+    <p class="about-signature">{site.concept.signature}</p>
+  )}
 </div>
