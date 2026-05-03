@@ -67,6 +67,13 @@ img { display: block; max-width: 100%; }
 .logo-main {
   font-family: var(--font-display);
   font-size: 32px; font-weight: 400; letter-spacing: 0.15em;
+  display: inline-flex; align-items: center; line-height: 1;
+}
+.logo-image {
+  display: block; height: 40px; width: auto; max-width: 240px;
+}
+@media (max-width: 768px) {
+  .logo-image { height: 30px; }
 }
 .header-icons {
   display: flex; gap: 18px; align-items: center;
@@ -284,6 +291,9 @@ img { display: block; max-width: 100%; }
 .carousel-item {
   flex: 0 0 220px; scroll-snap-align: start;
   cursor: pointer;
+}
+.carousel-track .product-card {
+  flex: 0 0 220px; scroll-snap-align: start;
 }
 .carousel-item .item-img {
   aspect-ratio: 1/1; overflow: hidden;
@@ -885,7 +895,7 @@ img { display: block; max-width: 100%; }
   .hero { height: 40vh; }
   .hero-title { font-size: 22px; }
   .section-title { font-size: 20px; }
-  .carousel-item { flex: 0 0 160px; }
+  .carousel-item, .carousel-track .product-card { flex: 0 0 160px; }
 
   /* Related cards: horizontal scroll on mobile */
   .related-section .related-grid {

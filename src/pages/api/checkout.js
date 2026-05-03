@@ -1,22 +1,28 @@
 import Stripe from 'stripe';
+import { getSite } from '../../lib/site';
 
 export const prerender = false;
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
-// 送料設定: SHIPPING_FEE 円、ただし FREE_SHIPPING_THRESHOLD 円以上で無料
-const SHIPPING_FEE = 400;
-const FREE_SHIPPING_THRESHOLD = 3000;
+// 送料設定: site.json shipping.{fee, freeThreshold} を編集可 (TinaCMS 経由)
+// 値が無い場合は従来のデフォルト (¥400 / ¥3,000 以上で無料) を使う。
+const DEFAULT_FEE = 400;
+const DEFAULT_FREE_THRESHOLD = 3000;
 
 export const POST = async ({ request }) => {
+  const site = await getSite();
+  const SHIPPING_FEE = Number(site?.shipping?.fee ?? DEFAULT_FEE);
+  const FREE_SHIPPING_THRESHOLD = Number(site?.shipping?.freeThreshold ?? DEFAULT_FREE_THRESHOLD);
+
   const data = await request.formData();
 
   try {
     let line_items = [];
 
     // 数量変更はカート / ミニカート側だけで行う。チェックアウト画面で
-    // 数量を変えると送料の無料判定 (¥2,000 以上) がセッション作成時の値に
-    // 固定されたままになり、閾値を下回っても送料を請求できなくなるため。
+    // 数量を変えると送料の無料判定がセッション作成時の値に固定されたまま
+    // になり、閾値を下回っても送料を請求できなくなるため。
     const cartData = data.get('cartData');
     if (cartData) {
       const items = JSON.parse(cartData);

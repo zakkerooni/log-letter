@@ -75,22 +75,7 @@ const searchData = products.data.map(p => ({
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M15 18l-6-6 6-6" /></svg>
       </button>
       <div class="carousel-track" data-carousel-track>
-        {picks.map((product) => {
-          const image = product.images?.[0] || 'https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST';
-          const creator = product.metadata?.creator || 'POST';
-          const price = product.default_price;
-          const amount = price?.unit_amount ?? 0;
-          return (
-            <a href={`/product/${product.id}`} class="carousel-item">
-              <div class="item-img">
-                <img src={image} alt={product.name} loading="lazy" />
-              </div>
-              <p class="item-creator">{creator}</p>
-              <p class="item-name">{product.name}</p>
-              <p class="item-price">¥{amount.toLocaleString()}</p>
-            </a>
-          );
-        })}
+        {picks.map((product) => <ProductCard product={product} />)}
       </div>
       <button class="carousel-nav carousel-next" aria-label="Next" data-carousel-next>
         <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 18l6-6-6-6" /></svg>

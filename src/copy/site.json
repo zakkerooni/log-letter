@@ -2,7 +2,8 @@
   "_comment": "サイト全体の文言はこのファイルで一元管理。キーは変更せず、値(右側の文字列)を編集してください。",
   "_links_comment": "サイト全体の連絡先リンク先。情報変更時はここだけ書き換える。",
   "links": {
-    "companyContactUrl": "https://www.miks-inc.com/company"
+    "companyContactUrl": "https://www.miks-inc.com/company",
+    "instagramUrl": "https://www.instagram.com/log_letter/"
   },
   "meta": {
     "siteName": "Log Letter",
@@ -19,7 +20,8 @@
     "logo": "Log-Letter",
     "tagBelow": "Curation by MiKS",
     "navArchive": "Library (Online Shop)",
-    "navAbout": "About us"
+    "navAbout": "About us",
+    "logoImage": ""
   },
   "mobileNav": {
     "home": "Home",
@@ -128,5 +130,9 @@
     "tokushohoTitle": "特定商取引法に基づく表記",
     "privacyTitle": "プライバシーポリシー",
     "shippingTitle": "配送・返品ポリシー"
+  },
+  "shipping": {
+    "fee": 400,
+    "freeThreshold": 3000
   }
 }
