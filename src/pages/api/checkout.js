@@ -44,7 +44,19 @@ export const POST = async ({ request }) => {
       (sum, price, i) => sum + price.unit_amount * line_items[i].quantity,
       0,
     );
-    const shippingAmount = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+    const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+    const shippingAmount = isFreeShipping ? 0 : SHIPPING_FEE;
+    const remainingForFree = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+
+    // 送料行に出す名前 (左カラムの注文サマリーに表示)
+    const shippingDisplayName = isFreeShipping
+      ? `送料無料 (¥${FREE_SHIPPING_THRESHOLD.toLocaleString()}以上のご購入)`
+      : `送料 (全国一律) — あと¥${remainingForFree.toLocaleString()}で送料無料`;
+
+    // 決済ボタン直上に出すアップセル文言 (右カラム)
+    const submitMessage = isFreeShipping
+      ? '送料無料が適用されています 🎉'
+      : `あと¥${remainingForFree.toLocaleString()}のご購入で送料無料になります。`;
 
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -60,13 +72,13 @@ export const POST = async ({ request }) => {
           shipping_rate_data: {
             type: 'fixed_amount',
             fixed_amount: { amount: shippingAmount, currency: 'jpy' },
-            display_name:
-              shippingAmount === 0
-                ? `送料無料 (¥${FREE_SHIPPING_THRESHOLD.toLocaleString()}以上のご購入)`
-                : '送料 (全国一律)',
+            display_name: shippingDisplayName,
           },
         },
       ],
+      custom_text: {
+        submit: { message: submitMessage },
+      },
       success_url: `${new URL(request.url).origin}/success`,
       cancel_url: `${new URL(request.url).origin}/cart`,
     });
