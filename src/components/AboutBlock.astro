@@ -9,6 +9,6 @@ const { compact = false } = Astro.props;
     <h2 class="section-title" style="margin-bottom: 0;">{site.concept.heading}</h2>
   </div>
   <div class="about-text">
-    {site.concept.paragraphs.map((p) => <p>{p}</p>)}
+    {site.concept.body.split(/\n{2,}/).map((p) => <p>{p}</p>)}
   </div>
 </div>

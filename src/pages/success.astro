@@ -9,7 +9,7 @@ const site = Astro.locals.site;
     <div style="max-width: 640px;">
       <span class="section-title-sm">{site.success.smallLabel}</span>
       <div class="about-text" style="margin-top: 32px;">
-        {site.success.paragraphs.map((p) => <p set:html={p}></p>)}
+        {site.success.body.split(/\n{2,}/).map((p) => <p set:html={p}></p>)}
         <p style="font-size: 11px; color: var(--muted); letter-spacing: 0.2em; font-family: var(--font-body);">
           {site.success.subNote}
         </p>
