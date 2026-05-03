@@ -2,6 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 
 const site = Astro.locals.site;
+
+const paragraphs = site.about.body
+  ? site.about.body.split(/\n{2,}/)
+  : (site.about.paragraphs ?? []);
 ---
 
 <Layout title={site.header.navAbout}>
@@ -17,7 +21,7 @@ const site = Astro.locals.site;
       <h2 class="section-title" style="margin-bottom: 0;">{site.about.heading}</h2>
     </div>
     <div class="about-text">
-      {site.about.body.split(/\n{2,}/).map((p) => <p>{p}</p>)}
+      {paragraphs.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
