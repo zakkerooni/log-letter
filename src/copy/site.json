@@ -1,10 +1,6 @@
 {
   "_comment": "サイト全体の文言はこのファイルで一元管理。キーは変更せず、値(右側の文字列)を編集してください。",
   "_links_comment": "サイト全体の連絡先リンク先。情報変更時はここだけ書き換える。",
-  "shipping": {
-    "fee": 400,
-    "freeThreshold": 3000
-  },
   "links": {
     "companyContactUrl": "https://www.miks-inc.com/company"
   },
@@ -19,8 +15,9 @@
     "addressCountry": "JP"
   },
   "header": {
-    "tagAbove": "PostCard Library",
-    "logo": "Log-Letter",
+    "tagAbove": "",
+    "logo": "",
+    "logoImage": "/images/logo-bk.svg",
     "tagBelow": "Curation by MiKS",
     "navArchive": "Library (Online Shop)",
     "navAbout": "About us"
@@ -45,16 +42,12 @@
   },
   "concept": {
     "smallLabel": "About us",
-    "heading": "ーポストカードは、ある瞬間の「記録」である。",
-    "body": "情緒豊かな日本のなかでも特異な文化都市「金沢」から、クリエイターの視点が切り取った空気感・断片を、手に取れる形、届ける形のポストカードへと落とし込みます。\n\n少ないながらも、売上の一部は次なる作品を生むための糧としてクリエイターの創作活動を支援します。",
-    "signature": "Curation by MiKS"
+    "heading": "ーポストカードは、ある瞬間の「記録」である。"
   },
   "about": {
     "smallLabel": "About us",
     "heading": "ポストカードは、ある瞬間の「記録」である。",
-    "backToArchive": "オンラインショップ",
-    "body": "情緒豊かな日本のなかでも特異な文化都市「金沢」から、クリエイターの視点が切り取った空気感・断片を、手に取れる形、届ける形のポストカードへと落とし込みます。\n\n少ないながらも、売上の一部は次なる作品を生むための糧としてクリエイターの創作活動を支援します。\n\nMiKS inc,",
-    "signature": ""
+    "backToArchive": "オンラインショップ"
   },
   "product": {
     "addToCart": "カートに入れる",
