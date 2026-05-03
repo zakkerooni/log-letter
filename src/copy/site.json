@@ -40,9 +40,7 @@
     "picksHeading": "ピックアップ",
     "archiveRecordsSuffix": "Records",
     "archiveHeading": "ライブラリー",
-    "filterAll": "All",
-    "heroImage": "/images/hero.jpg",
-    "heroHeight": 0
+    "filterAll": "All"
   },
   "concept": {
     "smallLabel": "About us",
@@ -108,22 +106,16 @@
     "backToHome": "Back to Home"
   },
   "footer": {
-    "brandTitle": "Log Letter",
     "brandLines": [
-      "Log Letter",
-      "by MiKS inc."
+      "Log Letter by",
+      "MiKS inc."
     ],
     "menuTitle": "Menu",
-    "connectTitle": "Connect",
-    "instagramLabel": "Instagram",
     "linkArchive": "Archive (Online Shop)",
-    "linkAbout": "About",
-    "linkContact": "Contact",
-    "linkTokushoho": "特定商取引法に基づく表記",
-    "linkPrivacy": "プライバシーポリシー",
-    "linkShipping": "配送・返品ポリシー",
-    "copyright": "© {year} Log Letter — All rights reserved.",
-    "linkLegal": "特定商取引法に基づく表記/プライバシーポリシー"
+    "linkAbout": "About us",
+    "linkContact": "Contact（外部サイト）",
+    "linkLegal": "特定商取引法に基づく表記/プライバシーポリシー",
+    "copyright": "© {year} Log Letter — All rights reserved."
   },
   "legal": {
     "legalPageTitle": "特定商取引法に基づく表記/プライバシーポリシー",
