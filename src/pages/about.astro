@@ -18,7 +18,7 @@ const paragraphs = site.about.body
   <section class="about-section" style="padding-top: 40px; padding-bottom: 60px;">
     <div style="margin-bottom: 48px;">
       <span class="section-title-sm">{site.about.smallLabel}</span>
-      <h2 class="section-title" style="margin-bottom: 0;">{site.about.heading}</h2>
+      <h2 class="section-title" style="margin-bottom: 0;" set:html={site.about.heading} />
     </div>
     <div class="about-text">
       {paragraphs.map((p) => <p set:html={p} />)}

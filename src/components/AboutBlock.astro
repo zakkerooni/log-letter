@@ -10,7 +10,7 @@ const paragraphs = site.concept.body
 <div class={`about-section ${compact ? 'compact' : ''}`}>
   <div style="margin-bottom: 32px;">
     <span class="section-title-sm">{site.concept.smallLabel}</span>
-    <h2 class="section-title" style="margin-bottom: 0;">{site.concept.heading}</h2>
+    <h2 class="section-title" style="margin-bottom: 0;" set:html={site.concept.heading} />
   </div>
   <div class="about-text">
     {paragraphs.map((p) => <p set:html={p} />)}
