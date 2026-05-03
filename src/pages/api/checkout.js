@@ -4,6 +4,10 @@ export const prerender = false;
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
+// 送料設定: SHIPPING_FEE 円、ただし FREE_SHIPPING_THRESHOLD 円以上で無料
+const SHIPPING_FEE = 400;
+const FREE_SHIPPING_THRESHOLD = 2000;
+
 export const POST = async ({ request }) => {
   const data = await request.formData();
 
@@ -24,18 +28,37 @@ export const POST = async ({ request }) => {
       line_items = [{ price: priceId, quantity: 1 }];
     }
 
+    // Stripe から実価格を取得して小計を計算 (クライアント値は信用しない)
+    const prices = await Promise.all(
+      line_items.map((item) => stripe.prices.retrieve(item.price)),
+    );
+    const subtotal = prices.reduce(
+      (sum, price, i) => sum + price.unit_amount * line_items[i].quantity,
+      0,
+    );
+    const shippingAmount = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
-      // --- ここから追加 ---
       shipping_address_collection: {
-        allowed_countries: ['JP'], // 日本国内の住所入力を有効にする
+        allowed_countries: ['JP'],
       },
       phone_number_collection: {
-        enabled: true, // 配送に便利な電話番号入力もオン
+        enabled: true,
       },
-
-      // --- ここまで追加 ---
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: shippingAmount, currency: 'jpy' },
+            display_name:
+              shippingAmount === 0
+                ? `送料無料 (¥${FREE_SHIPPING_THRESHOLD.toLocaleString()}以上のご購入)`
+                : '送料 (全国一律)',
+          },
+        },
+      ],
       success_url: `${new URL(request.url).origin}/success`,
       cancel_url: `${new URL(request.url).origin}/cart`,
     });
