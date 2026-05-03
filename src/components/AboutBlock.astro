@@ -13,7 +13,7 @@ const paragraphs = site.concept.body
     <h2 class="section-title" style="margin-bottom: 0;">{site.concept.heading}</h2>
   </div>
   <div class="about-text">
-    {paragraphs.map((p) => <p>{p}</p>)}
+    {paragraphs.map((p) => <p set:html={p} />)}
   </div>
   {site.concept.signature && (
     <p class="about-signature">{site.concept.signature}</p>
