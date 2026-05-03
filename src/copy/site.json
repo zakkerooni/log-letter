@@ -102,10 +102,10 @@
     "backToHome": "Back to Home"
   },
   "footer": {
-    "brandTitle": "POST",
+    "brandTitle": "Log Letter",
     "brandLines": [
-      "Kanazawa, Japan",
-      "by 株式会社MiKS"
+      "Log Letter",
+      "by MiKS inc."
     ],
     "menuTitle": "Menu",
     "connectTitle": "Connect",
