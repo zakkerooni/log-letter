@@ -6,8 +6,7 @@
     "freeThreshold": 3000
   },
   "links": {
-    "companyContactUrl": "https://www.miks-inc.com/company",
-    "companyHomeUrl": "https://www.miks-inc.com/"
+    "companyContactUrl": "https://www.miks-inc.com/company"
   },
   "meta": {
     "siteName": "Log Letter ｜Kanazawa",
@@ -48,7 +47,7 @@
     "smallLabel": "コンセプト",
     "heading": "Concept",
     "paragraphs": [
-      "ーポストカードは、ある瞬間の「記録」である。\n\n情緒豊かな日本のなかでも特異な文化都市「金沢」から、クリエイターの視点が切り取った空気感・断片を、手に取れる形、届ける形のポストカードへと落とし込みます。\n\n少ないながらも、売上の一部は次なる作品を生むための糧としてクリエイターの創作活動を支援します。\n\n株式会社MiKS"
+      "ーポストカードは、ある瞬間の「記録」である。\n\n情緒豊かな日本のなかでも特異な文化都市「金沢」から、クリエイターの視点が切り取った空気感・断片を、手に取れる形、届ける形のポストカードへと落とし込みます。\n\n少ないながらも、売上の一部は次なる作品を生むための糧としてクリエイターの創作活動を支援します。\n\nMiKS inc,"
     ]
   },
   "about": {
@@ -132,7 +131,6 @@
   "legal": {
     "tokushohoTitle": "特定商取引法に基づく表記",
     "privacyTitle": "プライバシーポリシー",
-    "shippingTitle": "配送・返品ポリシー",
-    "legalPageTitle": "Policies"
+    "shippingTitle": "配送・返品ポリシー"
   }
 }
