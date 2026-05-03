@@ -120,6 +120,7 @@
     "copyright": "© {year} Log Letter — All rights reserved."
   },
   "legal": {
+    "legalPageTitle": "特定商取引法に基づく表記/プライバシーポリシー",
     "tokushohoTitle": "特定商取引法に基づく表記",
     "privacyTitle": "プライバシーポリシー",
     "shippingTitle": "配送・返品ポリシー"
