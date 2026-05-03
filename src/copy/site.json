@@ -41,12 +41,14 @@
   },
   "concept": {
     "smallLabel": "コンセプト",
-    "heading": "Concept"
+    "heading": "Concept",
+    "body": "— ポストカードは、ある瞬間の「記録」である。\n日本でも特異な文化都市「金沢」からクリエイターの視点が切り取る空気感・断片を、\n手に取り、届ける形としてお送りします。"
   },
   "about": {
     "smallLabel": "About POST",
     "heading": "The Record of a Moment",
-    "backToArchive": "Back to Archive"
+    "backToArchive": "Back to Archive",
+    "body": "ポストカードは、ある瞬間の「記録」である。私たちはそう考えます。\n\n金沢の静かな空気感や、クリエイターの視点が切り取った断片を、手に取れる形、届ける形へと。\n\nMiKSは、クリエイターの創作活動を支援し、売上の一部は、次なる作品を生むための糧として作家へ還元されます。"
   },
   "product": {
     "addToCart": "カートに入れる",
@@ -94,7 +96,8 @@
   "success": {
     "smallLabel": "Order Completed",
     "subNote": "ご登録いただいたメールアドレスへ、確認メールをお送りしました。",
-    "backToHome": "Back to Library"
+    "backToHome": "Back to Library",
+    "body": "ご購入ありがとうございました。<br />ポストカードの到着まで、今しばらくお待ちください。"
   },
   "notFound": {
     "title": "404",
