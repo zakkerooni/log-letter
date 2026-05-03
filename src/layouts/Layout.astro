@@ -3,9 +3,13 @@ import '../styles/global.css';
 
 const site = Astro.locals.site;
 const { title } = Astro.props;
-const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://instagram.com';
+const instagramUrl =
+  site?.links?.instagramUrl ||
+  import.meta.env.PUBLIC_INSTAGRAM_URL ||
+  'https://www.instagram.com/log_letter/';
 const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || '';
 const gaId = import.meta.env.PUBLIC_GA_ID || '';
+const logoImage = site?.header?.logoImage || '';
 ---
 
 <!doctype html>
@@ -56,7 +60,13 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
         </nav>
         <div class="logo-area">
           <span class="logo-tagline">{site.header.tagAbove}</span>
-          <a href="/" class="logo-main">{site.header.logo}</a>
+          <a href="/" class="logo-main">
+            {logoImage ? (
+              <img src={logoImage} alt={site.header.logo} class="logo-image" />
+            ) : (
+              site.header.logo
+            )}
+          </a>
           <span class="logo-tagline">{site.header.tagBelow}</span>
         </div>
         <div class="header-right">

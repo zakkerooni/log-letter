@@ -47,6 +47,11 @@ export default defineConfig({
                 label: "Contact 先 URL (株式会社MiKS のお問い合わせ窓口)",
                 type: "string",
               },
+              {
+                name: "instagramUrl",
+                label: "Instagram URL",
+                type: "string",
+              },
             ],
           },
           {
@@ -71,6 +76,7 @@ export default defineConfig({
             fields: [
               { name: "tagAbove", label: "ロゴ上タグライン", type: "string" },
               { name: "logo", label: "ロゴテキスト", type: "string" },
+              { name: "logoImage", label: "ロゴ画像 (SVG/PNG。設定するとテキストの代わりに表示)", type: "image" },
               { name: "tagBelow", label: "ロゴ下タグライン", type: "string" },
               { name: "navArchive", label: "Archive リンク文言", type: "string" },
               { name: "navAbout", label: "About リンク文言", type: "string" },
@@ -241,6 +247,15 @@ export default defineConfig({
               { name: "tokushohoTitle", label: "特商法ページタイトル", type: "string" },
               { name: "privacyTitle", label: "プライバシーページタイトル", type: "string" },
               { name: "shippingTitle", label: "配送ページタイトル", type: "string" },
+            ],
+          },
+          {
+            name: "shipping",
+            label: "📦 送料設定 (実際の決済に反映)",
+            type: "object",
+            fields: [
+              { name: "fee", label: "送料 (円)", type: "number" },
+              { name: "freeThreshold", label: "送料無料になる小計 (円)", type: "number" },
             ],
           },
         ],
