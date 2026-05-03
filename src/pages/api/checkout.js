@@ -6,7 +6,7 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
 
 // 送料設定: SHIPPING_FEE 円、ただし FREE_SHIPPING_THRESHOLD 円以上で無料
 const SHIPPING_FEE = 400;
-const FREE_SHIPPING_THRESHOLD = 2000;
+const FREE_SHIPPING_THRESHOLD = 3000;
 
 export const POST = async ({ request }) => {
   const data = await request.formData();

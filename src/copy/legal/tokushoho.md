@@ -8,7 +8,7 @@
 | メールアドレス     | [info@miks-inc.com](mailto:info@miks-inc.com)                                                                    |
 | 販売URL       | [https://log-letter.com](https://log-letter.com)                                                                 |
 | 販売価格        | 各商品ページに記載（すべて税込価格）                                                                                               |
-| 商品代金以外の必要料金 | 送料：国内全国一律 ¥400／¥2,000 以上のご注文で送料無料                                                                                |
+| 商品代金以外の必要料金 | 送料：国内全国一律 ¥400／¥3,000 以上のご注文で送料無料                                                                                |
 | お支払い方法      | クレジットカード（Visa, Mastercard, American Express, JCB, Diners, Discover）。決済代行は Stripe, Inc.                           |
 | お支払い時期      | ご注文確定時に即時決済                                                                                                      |
 | 商品の引渡し時期    | ご注文確定後、3 営業日以内に発送いたします（土日祝・年末年始を除く）                                                                              |
