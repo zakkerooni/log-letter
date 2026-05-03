@@ -1,6 +1,10 @@
 ---
 const site = Astro.locals.site;
 const { compact = false } = Astro.props;
+
+const paragraphs = site.concept.body
+  ? site.concept.body.split(/\n{2,}/)
+  : (site.concept.paragraphs ?? []);
 ---
 
 <div class={`about-section ${compact ? 'compact' : ''}`}>
@@ -9,6 +13,6 @@ const { compact = false } = Astro.props;
     <h2 class="section-title" style="margin-bottom: 0;">{site.concept.heading}</h2>
   </div>
   <div class="about-text">
-    {site.concept.body.split(/\n{2,}/).map((p) => <p>{p}</p>)}
+    {paragraphs.map((p) => <p>{p}</p>)}
   </div>
 </div>
