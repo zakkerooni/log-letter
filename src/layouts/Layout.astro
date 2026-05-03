@@ -140,7 +140,6 @@ const logoImage = site?.header?.logoImage || '';
       <div class="site-footer">
         <div class="footer-grid">
           <div class="footer-col">
-            <div class="footer-col-title">{site.footer.brandTitle}</div>
             <p
               style="line-height: 1.8;"
               set:html={site.footer.brandLines
@@ -159,17 +158,10 @@ const logoImage = site?.header?.logoImage || '';
             <a href="/about">{site.footer.linkAbout}</a>
             <a href={site.links.companyContactUrl} target="_blank" rel="noopener">{site.footer.linkContact}</a>
           </div>
-          <div class="footer-col">
-            <div class="footer-col-title">{site.footer.connectTitle}</div>
-            <a href={instagramUrl} target="_blank" rel="noopener">{site.footer.instagramLabel}</a>
-            <a href={site.links.companyContactUrl} target="_blank" rel="noopener">{site.footer.linkContact}</a>
-          </div>
         </div>
         <div class="footer-grid" style="margin-top: 32px;">
           <div class="footer-col">
-            <a href="/legal#tokushoho">{site.footer.linkTokushoho}</a>
-            <a href="/legal#shipping">{site.footer.linkShipping}</a>
-            <a href="/legal#privacy">{site.footer.linkPrivacy}</a>
+            <a href="/legal">{site.footer.linkLegal || '特定商取引法に基づく表記/プライバシーポリシー'}</a>
           </div>
         </div>
         <div class="footer-bottom">{site.footer.copyright.replace('{year}', String(new Date().getFullYear()))}</div>

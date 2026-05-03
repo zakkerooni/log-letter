@@ -110,8 +110,8 @@
   "footer": {
     "brandTitle": "Log Letter",
     "brandLines": [
-      "Log Letter by",
-      "MiKS inc."
+      "Log Letter",
+      "by MiKS inc."
     ],
     "menuTitle": "Menu",
     "connectTitle": "Connect",
@@ -122,7 +122,8 @@
     "linkTokushoho": "特定商取引法に基づく表記",
     "linkPrivacy": "プライバシーポリシー",
     "linkShipping": "配送・返品ポリシー",
-    "copyright": "© {year} Log Letter — All rights reserved."
+    "copyright": "© {year} Log Letter — All rights reserved.",
+    "linkLegal": "特定商取引法に基づく表記/プライバシーポリシー"
   },
   "legal": {
     "legalPageTitle": "特定商取引法に基づく表記/プライバシーポリシー",

@@ -21,8 +21,21 @@ if (!product || !product.active) {
 
 const price = product.default_price;
 const amount = price?.unit_amount ?? 0;
-const images = product.images?.length ? product.images : ['https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST'];
 const creator = product.metadata?.creator || 'POST';
+
+// メイン画像 (Stripe の images 配列) に加えて metadata の image2〜image8 を読む。
+// Stripe ダッシュボード UI が 1 枚しか登録できないので、追加画像は metadata の
+// image2 / image3 / ... に URL を入れる運用。
+const extraImages = [];
+for (let i = 2; i <= 8; i += 1) {
+  const url = product.metadata?.[`image${i}`];
+  if (typeof url === 'string' && url.trim()) extraImages.push(url.trim());
+}
+const stripeImages = product.images?.length ? product.images : [];
+const combined = [...stripeImages, ...extraImages];
+const images = combined.length
+  ? combined
+  : ['https://placehold.jp/24/eeeeee/999999/800x800.png?text=POST'];
 
 // Related products
 const allProducts = await stripe.products.list({ active: true, expand: ['data.default_price'] });
