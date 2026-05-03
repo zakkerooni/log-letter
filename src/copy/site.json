@@ -6,7 +6,8 @@
     "freeThreshold": 3000
   },
   "links": {
-    "companyContactUrl": "https://www.miks-inc.com/company"
+    "companyContactUrl": "https://www.miks-inc.com/company",
+    "companyHomeUrl": "https://www.miks-inc.com/"
   },
   "meta": {
     "siteName": "Log Letter ｜Kanazawa",
