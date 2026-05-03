@@ -48,18 +48,24 @@ const searchData = products.data.map(p => ({
   })} />
 
   <!-- Hero -->
-  <section class="hero">
-    <img
-      src="/images/hero.jpg"
-      alt={site.meta.siteSuffix}
-      class="hero-img"
-      onerror="this.style.display='none'"
-    />
-    <div class="hero-overlay">
-      <h1 class="hero-title">{site.home.heroTitle}</h1>
-      <p class="hero-sub">{site.home.heroSub}</p>
-    </div>
-  </section>
+  {(() => {
+    const heroImage = site.home.heroImage || '/images/hero.jpg';
+    const heroHeight = Number(site.home.heroHeight) > 0 ? `${site.home.heroHeight}px` : '75vh';
+    return (
+      <section class="hero" style={`height: ${heroHeight};`}>
+        <img
+          src={heroImage}
+          alt={site.meta.siteSuffix}
+          class="hero-img"
+          onerror="this.style.display='none'"
+        />
+        <div class="hero-overlay">
+          <h1 class="hero-title">{site.home.heroTitle}</h1>
+          <p class="hero-sub">{site.home.heroSub}</p>
+        </div>
+      </section>
+    );
+  })()}
 
   <!-- Concept -->
   <AboutBlock />

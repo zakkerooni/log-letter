@@ -40,7 +40,9 @@
     "picksHeading": "ピックアップ",
     "archiveRecordsSuffix": "Records",
     "archiveHeading": "ライブラリー",
-    "filterAll": "All"
+    "filterAll": "All",
+    "heroImage": "/images/hero.jpg",
+    "heroHeight": 0
   },
   "concept": {
     "smallLabel": "About us",
