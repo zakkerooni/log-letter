@@ -382,14 +382,6 @@ img { display: block; max-width: 100%; }
   color: #555;
 }
 .about-text p { white-space: pre-line; }
-
-/* レスポンシブ改行用 — TinaCMS 本文中に <br class="br-mobile"> を入れる */
-.br-mobile { display: none; }
-.br-desktop { display: inline; }
-@media (max-width: 768px) {
-  .br-mobile { display: inline; }
-  .br-desktop { display: none; }
-}
 .about-text p + p { margin-top: 28px; }
 .about-signature {
   margin-top: 36px; text-align: center;
