@@ -2,7 +2,7 @@
   "_comment": "サイト全体の文言はこのファイルで一元管理。キーは変更せず、値(右側の文字列)を編集してください。",
   "_links_comment": "サイト全体の連絡先リンク先。情報変更時はここだけ書き換える。",
   "links": {
-    "companyContactUrl": "https://miks-inc.com/"
+    "companyContactUrl": "https://www.miks-inc.com/company"
   },
   "meta": {
     "siteName": "Log Letter",
