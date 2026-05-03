@@ -957,8 +957,8 @@ img { display: block; max-width: 100%; }
 
   /* About */
   .about-section { padding: 60px 20px; }
-  .about-text { font-size: 14px; text-align: left; }
-  .about-text p { text-align: left; }
+  .about-text { font-size: 14px; text-align: justify; text-justify: inter-character; }
+  .about-text p { text-align: justify; text-justify: inter-character; }
 
   /* Mini cart */
   .mini-cart { width: 100vw; }
