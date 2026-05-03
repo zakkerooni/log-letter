@@ -34,14 +34,14 @@
     "privacy": "プライバシーポリシー"
   },
   "home": {
-    "heroTitle": "Postcard Library",
-    "heroSub": "Kanazawa — Record of a Moment",
+    "heroHeight": 0,
+    "heroTitle": "",
+    "heroSub": "",
     "picksLabelSm": "Pickup / Latest",
     "picksHeading": "ピックアップ",
     "archiveRecordsSuffix": "Records",
     "archiveHeading": "ライブラリー",
-    "filterAll": "All",
-    "heroImage": ""
+    "filterAll": "All"
   },
   "concept": {
     "smallLabel": "About us",
