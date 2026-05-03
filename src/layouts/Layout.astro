@@ -248,7 +248,13 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
             <div class="mini-cart-item-img"><img src="${item.image}" alt="" /></div>
             <div>
               <div class="mini-cart-item-name">${item.name}</div>
-              <div class="mini-cart-item-detail">${item.creator} × ${item.qty}</div>
+              <div class="mini-cart-item-detail">${item.creator}</div>
+              <div class="mini-cart-item-qty">
+                <button data-mc-minus="${i}" aria-label="減らす">−</button>
+                <span>${item.qty}</span>
+                <button data-mc-plus="${i}" aria-label="増やす">+</button>
+                <button data-mc-remove="${i}" class="mini-cart-item-remove" aria-label="削除">✕</button>
+              </div>
             </div>
             <div class="mini-cart-item-price">¥${(item.price * item.qty).toLocaleString()}</div>
           </div>`;
@@ -256,6 +262,31 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
 
         if (totalEl) totalEl.textContent = `¥${total.toLocaleString()}`;
         if (dataInput) dataInput.value = JSON.stringify(cart.map(item => ({ priceId: item.priceId, qty: item.qty })));
+
+        itemsEl.querySelectorAll('[data-mc-minus]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const c = getCart();
+            const idx = parseInt(btn.dataset.mcMinus);
+            c[idx].qty = Math.max(1, c[idx].qty - 1);
+            saveCart(c); renderMiniCart();
+          });
+        });
+        itemsEl.querySelectorAll('[data-mc-plus]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const c = getCart();
+            const idx = parseInt(btn.dataset.mcPlus);
+            if (c[idx].qty >= MAX_QTY) { showToast(`最大${MAX_QTY}個までです`); return; }
+            c[idx].qty += 1;
+            saveCart(c); renderMiniCart();
+          });
+        });
+        itemsEl.querySelectorAll('[data-mc-remove]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const c = getCart();
+            c.splice(parseInt(btn.dataset.mcRemove), 1);
+            saveCart(c); renderMiniCart();
+          });
+        });
       }
 
       // ===== Bind cart buttons =====
