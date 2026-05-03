@@ -244,9 +244,10 @@ export default defineConfig({
             label: "⚖️ 法務ページタイトル",
             type: "object",
             fields: [
-              { name: "tokushohoTitle", label: "特商法ページタイトル", type: "string" },
-              { name: "privacyTitle", label: "プライバシーページタイトル", type: "string" },
-              { name: "shippingTitle", label: "配送ページタイトル", type: "string" },
+              { name: "legalPageTitle", label: "統合ページタイトル (/legal)", type: "string" },
+              { name: "tokushohoTitle", label: "特商法セクションタイトル", type: "string" },
+              { name: "privacyTitle", label: "プライバシーセクションタイトル", type: "string" },
+              { name: "shippingTitle", label: "配送セクションタイトル", type: "string" },
             ],
           },
           {

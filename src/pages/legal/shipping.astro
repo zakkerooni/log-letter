@@ -1,16 +1,4 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { Content } from '../../copy/legal/shipping.md';
-
-const site = Astro.locals.site;
+export const prerender = false;
+return Astro.redirect('/legal#shipping', 301);
 ---
-
-<Layout title={site.legal.shippingTitle}>
-  <div class="breadcrumb">
-    <a href="/">Home</a><span>/</span>{site.legal.shippingTitle}
-  </div>
-  <div class="legal-page">
-    <h1>{site.legal.shippingTitle}</h1>
-    <Content />
-  </div>
-</Layout>
