@@ -371,14 +371,14 @@ img { display: block; max-width: 100%; }
 
 /* ========== About ========== */
 .about-section {
-  max-width: 800px; margin: 0 auto;
+  max-width: 600px; margin: 0 auto;
   padding: 100px 40px;
   text-align: center;
 }
 .about-text {
   font-family: var(--font-jp);
-  font-size: 15px; font-weight: 400;
-  line-height: 2.4; letter-spacing: 0.08em;
+  font-size: 14px; font-weight: 400;
+  line-height: 2.3; letter-spacing: 0.08em;
   color: #555;
 }
 .about-text p { white-space: pre-line; }
@@ -959,7 +959,7 @@ img { display: block; max-width: 100%; }
   .about-section { padding: 60px 20px; text-align: left; }
   .about-section .section-title-sm,
   .about-section .section-title { text-align: left; }
-  .about-text { font-size: 14px; text-align: justify; text-justify: inter-character; }
+  .about-text { font-size: 13px; text-align: justify; text-justify: inter-character; }
   .about-text p { text-align: justify; text-justify: inter-character; }
 
   /* Mini cart */
