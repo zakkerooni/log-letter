@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-import site from '../copy/site.json';
 
+const site = Astro.locals.site;
 const { title } = Astro.props;
 const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://instagram.com';
 const bannerText = import.meta.env.PUBLIC_BANNER_TEXT || '';

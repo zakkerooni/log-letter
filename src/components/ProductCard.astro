@@ -1,5 +1,5 @@
 ---
-import site from '../copy/site.json';
+const site = Astro.locals.site;
 const { product } = Astro.props;
 const price = product.default_price;
 const amount = price?.unit_amount ?? 0;
