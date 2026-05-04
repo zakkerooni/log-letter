@@ -382,6 +382,8 @@ img { display: block; max-width: 100%; }
   color: #555;
 }
 .about-text p { white-space: pre-line; }
+/* 見出しでも textarea の Enter を改行として尊重する (PC・モバイル両方) */
+.about-section .section-title { white-space: pre-line; }
 
 /* レスポンシブ改行用 — TinaCMS 本文中に <br class="br-mobile"> を入れる */
 .br-mobile { display: none; }
