@@ -123,7 +123,7 @@ export default defineConfig({
             type: "object",
             fields: [
               { name: "smallLabel", label: "小見出し", type: "string" },
-              { name: "heading", label: "見出し", type: "string" },
+              { name: "heading", label: "見出し (Enter で改行可)", type: "string", ui: { component: "textarea" } },
               { name: "body", label: "本文 (空行で段落区切り)", type: "string", ui: { component: "textarea" } },
               { name: "signature", label: "末尾サイン (Curation by ... のような小さい文言)", type: "string" },
             ],
@@ -134,7 +134,7 @@ export default defineConfig({
             type: "object",
             fields: [
               { name: "smallLabel", label: "小見出し", type: "string" },
-              { name: "heading", label: "見出し", type: "string" },
+              { name: "heading", label: "見出し (Enter で改行可)", type: "string", ui: { component: "textarea" } },
               { name: "body", label: "本文 (空行で段落区切り)", type: "string", ui: { component: "textarea" } },
               { name: "signature", label: "末尾サイン (Curation by ... のような小さい文言)", type: "string" },
               { name: "backToArchive", label: "戻るボタン文言", type: "string" },
