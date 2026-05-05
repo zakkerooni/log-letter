@@ -5,13 +5,15 @@ export const prerender = false;
 // Stripe Webhook ハンドラー (Cloudflare Workers / Astro adapter 上で動作)
 // 役割:
 //  - 署名検証 (STRIPE_WEBHOOK_SECRET)
-//  - checkout.session.completed イベントを受信し注文情報をログ出力
-//  - 将来的にメール通知 / Notion DB 書き込み等に拡張可能
+//  - checkout.session.completed イベントを受信
+//  - session.metadata.location があれば KV (STANDS_KV) に売上レコードを記録
+//    → /admin/stands でエリア別集計に利用される
+//  - 通常の商品 (location なし) は記録なし。EC サイト経由の決済は影響なし
 //
 // Stripe Dashboard で endpoint URL = https://<本番ドメイン>/api/stripe-webhook を登録し、
 // 取得した whsec_xxx を Cloudflare Pages の環境変数 STRIPE_WEBHOOK_SECRET に設定してください。
 
-export const POST = async ({ request }) => {
+export const POST = async ({ request, locals }) => {
   const secretKey = import.meta.env.STRIPE_SECRET_KEY;
   const webhookSecret = import.meta.env.STRIPE_WEBHOOK_SECRET;
 
@@ -25,7 +27,6 @@ export const POST = async ({ request }) => {
 
   let event;
   try {
-    // Cloudflare Workers では非同期版の constructEventAsync を使用
     event = await stripe.webhooks.constructEventAsync(payload, signature, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
@@ -43,8 +44,30 @@ export const POST = async ({ request }) => {
         name: session.customer_details?.name,
         phone: session.customer_details?.phone,
         shipping: session.shipping_details,
+        location: session.metadata?.location,
       });
-      // TODO: メール通知 / 注文管理システム連携をここに追加
+
+      // 直売所 (Payment Link) の売上を KV に記録
+      const kv = locals?.runtime?.env?.STANDS_KV;
+      const location = session.metadata?.location;
+      if (kv && location) {
+        const record = {
+          sessionId: session.id,
+          location,
+          locationName: session.metadata.locationName || location,
+          productName: session.metadata.productName || '',
+          amount: session.amount_total,
+          currency: session.currency,
+          customerEmail: session.customer_details?.email || '',
+          customerName: session.customer_details?.name || '',
+          timestamp: new Date(session.created * 1000).toISOString(),
+        };
+        try {
+          await kv.put(`sale:${session.id}`, JSON.stringify(record));
+        } catch (e) {
+          console.error('[stands-kv] write failed:', e);
+        }
+      }
       break;
     }
     default:
