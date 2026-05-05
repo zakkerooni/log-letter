@@ -1,0 +1,242 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+
+const site = Astro.locals.site;
+const expected = import.meta.env.STANDS_ADMIN_PASSWORD;
+
+// HTTP Basic 認証チェック (envのパスワードと比較)
+function unauthorized() {
+  return new Response('Unauthorized', {
+    status: 401,
+    headers: { 'WWW-Authenticate': 'Basic realm="stands"' },
+  });
+}
+
+if (!expected) {
+  return new Response(
+    'STANDS_ADMIN_PASSWORD env var is not set. Set it in Cloudflare Pages → Settings → Environment Variables.',
+    { status: 503 },
+  );
+}
+
+const authHeader = Astro.request.headers.get('authorization') || '';
+if (!authHeader.startsWith('Basic ')) return unauthorized();
+let provided = '';
+try {
+  provided = atob(authHeader.slice(6)).split(':')[1] || '';
+} catch {
+  return unauthorized();
+}
+if (provided !== expected) return unauthorized();
+
+// KV から売上レコードを取得
+const kv = Astro.locals.runtime?.env?.STANDS_KV;
+type Sale = {
+  sessionId: string;
+  location: string;
+  locationName: string;
+  productName: string;
+  amount: number;
+  currency: string;
+  customerEmail: string;
+  customerName: string;
+  timestamp: string;
+};
+
+const sales: Sale[] = [];
+if (kv) {
+  // KV.list() はカーソルで分割される。1000 件まで一気に取れる
+  let cursor: string | undefined;
+  for (let i = 0; i < 10; i += 1) {
+    const res = await kv.list({ prefix: 'sale:', cursor });
+    for (const k of res.keys) {
+      const v = await kv.get(k.name);
+      if (v) {
+        try { sales.push(JSON.parse(v)); } catch {}
+      }
+    }
+    if (res.list_complete) break;
+    cursor = res.cursor;
+  }
+}
+
+// 期間フィルター (デフォルトは全期間)
+const url = new URL(Astro.request.url);
+const fromStr = url.searchParams.get('from') || '';
+const toStr = url.searchParams.get('to') || '';
+const from = fromStr ? new Date(fromStr) : null;
+const to = toStr ? new Date(toStr + 'T23:59:59') : null;
+
+const filtered = sales.filter((s) => {
+  const t = new Date(s.timestamp);
+  if (from && t < from) return false;
+  if (to && t > to) return false;
+  return true;
+});
+
+// エリアごとに集計
+type AreaStats = {
+  location: string;
+  locationName: string;
+  count: number;
+  total: number;
+  latest: string;
+};
+const byArea = new Map<string, AreaStats>();
+for (const s of filtered) {
+  const cur = byArea.get(s.location) || {
+    location: s.location,
+    locationName: s.locationName || s.location,
+    count: 0,
+    total: 0,
+    latest: '',
+  };
+  cur.count += 1;
+  cur.total += s.amount;
+  if (!cur.latest || s.timestamp > cur.latest) cur.latest = s.timestamp;
+  byArea.set(s.location, cur);
+}
+const areas = [...byArea.values()].sort((a, b) => b.total - a.total);
+
+const grandTotal = filtered.reduce((sum, s) => sum + s.amount, 0);
+const grandCount = filtered.length;
+
+// 直近 50 件の販売
+const recent = [...filtered]
+  .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+  .slice(0, 50);
+
+const yen = (n: number) => `¥${n.toLocaleString()}`;
+const fmt = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+};
+---
+
+<Layout title="Stands Dashboard">
+  <div class="stands-page">
+    <h1>🥬 Stands Dashboard</h1>
+    <p class="stands-sub">エリアごとの売上 (Payment Link metadata.location 別集計)</p>
+
+    <form class="stands-filter" method="get">
+      <label>
+        From: <input type="date" name="from" value={fromStr} />
+      </label>
+      <label>
+        To: <input type="date" name="to" value={toStr} />
+      </label>
+      <button type="submit">フィルター</button>
+      <a href="/admin/stands">クリア</a>
+    </form>
+
+    <div class="stands-summary">
+      <div class="stands-card">
+        <div class="stands-label">合計売上</div>
+        <div class="stands-value">{yen(grandTotal)}</div>
+      </div>
+      <div class="stands-card">
+        <div class="stands-label">販売数</div>
+        <div class="stands-value">{grandCount}</div>
+      </div>
+      <div class="stands-card">
+        <div class="stands-label">エリア数</div>
+        <div class="stands-value">{areas.length}</div>
+      </div>
+    </div>
+
+    <h2>エリア別</h2>
+    {areas.length === 0 ? (
+      <p class="stands-empty">まだ売上記録がありません。</p>
+    ) : (
+      <table class="stands-table">
+        <thead>
+          <tr>
+            <th>エリア</th>
+            <th>販売数</th>
+            <th>売上</th>
+            <th>最新販売</th>
+          </tr>
+        </thead>
+        <tbody>
+          {areas.map((a) => (
+            <tr>
+              <td>
+                <strong>{a.locationName}</strong>
+                <span class="stands-id">{a.location}</span>
+              </td>
+              <td>{a.count}</td>
+              <td>{yen(a.total)}</td>
+              <td>{fmt(a.latest)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+
+    <h2>直近の販売 (最新 50 件)</h2>
+    {recent.length === 0 ? (
+      <p class="stands-empty">まだ売上記録がありません。</p>
+    ) : (
+      <table class="stands-table">
+        <thead>
+          <tr>
+            <th>日時</th>
+            <th>エリア</th>
+            <th>商品</th>
+            <th>金額</th>
+            <th>購入者</th>
+          </tr>
+        </thead>
+        <tbody>
+          {recent.map((s) => (
+            <tr>
+              <td>{fmt(s.timestamp)}</td>
+              <td>{s.locationName}</td>
+              <td>{s.productName}</td>
+              <td>{yen(s.amount)}</td>
+              <td>
+                {s.customerName}
+                {s.customerEmail && <span class="stands-email">{s.customerEmail}</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .stands-page {
+    max-width: 1100px; margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-family: var(--font-body);
+  }
+  .stands-page h1 { font-size: 22px; letter-spacing: 1px; margin-bottom: 4px; }
+  .stands-page h2 { font-size: 14px; letter-spacing: 1px; margin: 40px 0 12px; }
+  .stands-sub { color: var(--muted); font-size: 12px; margin-bottom: 24px; }
+  .stands-filter {
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    padding: 12px; margin-bottom: 24px;
+    background: var(--card-bg); border: 1px solid var(--border);
+  }
+  .stands-filter label { font-size: 12px; }
+  .stands-filter input { padding: 4px 8px; border: 1px solid var(--border); }
+  .stands-filter button { padding: 6px 16px; background: var(--fg); color: #fff; }
+  .stands-filter a { font-size: 12px; color: var(--muted); }
+  .stands-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stands-card { padding: 16px; background: var(--card-bg); border: 1px solid var(--border); }
+  .stands-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .stands-value { font-size: 20px; font-weight: 500; }
+  .stands-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .stands-table th, .stands-table td {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 8px; text-align: left;
+  }
+  .stands-table th { background: var(--card-bg); font-weight: 500; }
+  .stands-id { color: var(--muted); font-size: 10px; margin-left: 8px; }
+  .stands-email { display: block; color: var(--muted); font-size: 10px; }
+  .stands-empty { color: var(--muted); font-size: 12px; }
+</style>
