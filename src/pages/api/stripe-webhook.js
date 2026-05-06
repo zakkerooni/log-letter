@@ -14,8 +14,10 @@ export const prerender = false;
 // 取得した whsec_xxx を Cloudflare Pages の環境変数 STRIPE_WEBHOOK_SECRET に設定してください。
 
 export const POST = async ({ request, locals }) => {
-  const secretKey = import.meta.env.STRIPE_SECRET_KEY;
-  const webhookSecret = import.meta.env.STRIPE_WEBHOOK_SECRET;
+  // Cloudflare Workers の env var は runtime.env 経由で読む
+  const runtimeEnv = locals?.runtime?.env || {};
+  const secretKey = runtimeEnv.STRIPE_SECRET_KEY || import.meta.env.STRIPE_SECRET_KEY;
+  const webhookSecret = runtimeEnv.STRIPE_WEBHOOK_SECRET || import.meta.env.STRIPE_WEBHOOK_SECRET;
 
   if (!secretKey || !webhookSecret) {
     return new Response('Webhook not configured', { status: 503 });

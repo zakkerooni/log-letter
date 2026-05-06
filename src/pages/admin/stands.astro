@@ -4,7 +4,10 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 
 const site = Astro.locals.site;
-const expected = import.meta.env.STANDS_ADMIN_PASSWORD;
+// Cloudflare Workers の env var は runtime.env 経由で読む
+// (import.meta.env は build 時固定。dashboard で後から追加した値は入らない)
+const runtimeEnv = Astro.locals.runtime?.env || {};
+const expected = runtimeEnv.STANDS_ADMIN_PASSWORD || import.meta.env.STANDS_ADMIN_PASSWORD;
 
 // HTTP Basic 認証チェック (envのパスワードと比較)
 function unauthorized() {
